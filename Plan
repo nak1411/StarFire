@@ -1,4 +1,4 @@
-Gameplan for Starfire(?)
+Gameplan for Starfire
 
 Game Type: Space RPG
 
@@ -35,22 +35,8 @@ Overview:
 	[]Gameplay / Rules
 
 	[]Balancing
-	
-	
-Specifics Breakdown & Roadblocks:
 
-	!!!TILE RENDERING!!!
-
-	- Main priority to learn is a tile based system.  Need to get that working before moving on.
-		- Simplify as much as possible, use colored rectangles and pixels rather than images.
-		
-		Have a pixel array render the entire screen in the display class.  Have tiles be individually rendered.
-		
-		Classes:
-
-			- Display
-			- Tile (abstract)
-			- "Specific Tiles"
+	[]...
 		
 		
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////		
