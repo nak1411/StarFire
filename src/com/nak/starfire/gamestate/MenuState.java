@@ -19,12 +19,12 @@ public class MenuState {
 	}
 
 	public void update() {
-		if (Keyboard.down) {
-			GameStateManager.gameState = GameState.LEVELSTATE;
-		}
+
 	}
 
 	public void input() {
-
+		if (Keyboard.space) {
+			GameStateManager.gameState = GameState.LEVELSTATE;
+		}
 	}
 }

@@ -1,4 +1,4 @@
-package com.nak.starfire;
+package com.nak.starfire.utilities;
 
 public class Time {
 

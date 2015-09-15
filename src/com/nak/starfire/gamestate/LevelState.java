@@ -1,28 +1,41 @@
-package com.nak.starfire.level;
+package com.nak.starfire.gamestate;
 
 import java.awt.Graphics;
 
+import com.nak.starfire.Game;
+import com.nak.starfire.entity.Player;
+import com.nak.starfire.input.Keyboard;
 import com.nak.starfire.tile.Tile;
 import com.nak.starfire.utilities.Utilities;
 
 public class LevelState {
 
+	private Player player;
 	private int width, height;
 	private int[][] tiles;
+	private int dX, dY;
+	private int xVel = 2;
+	private int yVel = 2;
 
 	public LevelState(String path) {
+		player = new Player((Game.WIDTH * Game.SCALE / 2) - 12, (Game.HEIGHT * Game.SCALE / 2) - 24);
 		loadLevel(path);
 	}
 
 	public void update() {
+		if(Keyboard.left) dX -= xVel;
+		if(Keyboard.right) dX += xVel;
+		if(Keyboard.up) dY -= yVel;
+		if(Keyboard.down) dY += yVel;
 	}
 
 	public void render(Graphics g) {
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				getTile(x, y).render(g, (x * Tile.TILEWIDTH), (y * Tile.TILEHEIGHT));
+				getTile(x, y).render(g, (x * Tile.TILEWIDTH) - dX, (y * Tile.TILEHEIGHT) - dY);
 			}
 		}
+		player.render(g);
 	}
 
 	public Tile getTile(int x, int y) {

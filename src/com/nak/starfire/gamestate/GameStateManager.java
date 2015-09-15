@@ -2,12 +2,7 @@ package com.nak.starfire.gamestate;
 
 import java.awt.Graphics;
 
-import com.nak.starfire.level.LevelState;
-
 public class GameStateManager {
-
-	public static final int MENUSTATE = 0;
-	public static final int LEVEL1STATE = 1;
 
 	public static GameState gameState = GameState.MENUSTATE;
 	public static MenuState menuState;
@@ -20,6 +15,7 @@ public class GameStateManager {
 				menuState = new MenuState("/mainmenu.png");
 			}
 			menuState.update();
+			menuState.input();
 			break;
 		case LEVELSTATE:
 			if (levelState == null) {
