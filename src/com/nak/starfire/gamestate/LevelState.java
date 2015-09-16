@@ -2,7 +2,7 @@ package com.nak.starfire.gamestate;
 
 import java.awt.Graphics;
 
-import com.nak.starfire.entity.Entity;
+import com.nak.starfire.entity.EntityHandler;
 import com.nak.starfire.entity.Player;
 import com.nak.starfire.gfx.SpriteSheet;
 import com.nak.starfire.input.Keyboard;
@@ -11,7 +11,8 @@ import com.nak.starfire.utilities.Utilities;
 
 public class LevelState {
 
-	private Entity entity;
+	private EntityHandler entityHandler;
+
 	public static final int MAPWIDTH = 25, MAPHEIGHT = 23;
 	private int[][] tiles;
 	private int dX, dY;
@@ -21,56 +22,62 @@ public class LevelState {
 	private int yVel = 2;
 
 	public LevelState(String path) {
-		entity = new Player(spawnX, spawnY);
+		entityHandler = new EntityHandler();
+		entityHandler.addEntity(new Player(spawnX, spawnY, entityHandler));
 		loadLevel(path);
 	}
 
 	public void update() {
-		if(dX >= 0){
-			if(Keyboard.left){
+		entityHandler.update();
+		if (dX >= 0) {
+			if (Keyboard.left) {
 				dX -= xVel;
-				Entity.image = SpriteSheet.playerright;
+				Player.playerimage = SpriteSheet.playerright;
 			}
 		}
-		
-		if(dX <= (Tile.TILEWIDTH * MAPWIDTH) - Tile.TILEWIDTH){
-			if(Keyboard.right){
-				dX += xVel;
-				Entity.image = SpriteSheet.playerleft;
-			}
-		}
-		
-		if(dY >= 0){
-			if(Keyboard.up){
-				dY -= yVel;
-				Entity.image = SpriteSheet.playerup;
-			}
-		}
-		
-		if(dY <= (Tile.TILEHEIGHT * MAPHEIGHT) - Tile.TILEHEIGHT){
-			if(Keyboard.down){
-				dY += yVel;
-				Entity.image = SpriteSheet.playerdown;
-			}
-		}
-		
-		//Handle angled sprite animation
-		if(Keyboard.up && Keyboard.left) Entity.image = SpriteSheet.playerupperleft;
-		if(Keyboard.up && Keyboard.right) Entity.image = SpriteSheet.playerupperright;
-		if(Keyboard.down && Keyboard.left) Entity.image = SpriteSheet.playerlowerleft;
-		if(Keyboard.down && Keyboard.right) Entity.image = SpriteSheet.playerlowerright;
 
-		//System.out.println("Player Pos|X: " + dX + " Y: " + dY);
+		if (dX <= (Tile.TILEWIDTH * MAPWIDTH) - Tile.TILEWIDTH) {
+			if (Keyboard.right) {
+				dX += xVel;
+				Player.playerimage = SpriteSheet.playerleft;
+			}
+		}
+
+		if (dY >= 0) {
+			if (Keyboard.up) {
+				dY -= yVel;
+				Player.playerimage = SpriteSheet.playerup;
+			}
+		}
+
+		if (dY <= (Tile.TILEHEIGHT * MAPHEIGHT) - Tile.TILEHEIGHT) {
+			if (Keyboard.down) {
+				dY += yVel;
+				Player.playerimage = SpriteSheet.playerdown;
+			}
+		}
+
+		// Handle angled sprite animation
+		if (Keyboard.up && Keyboard.left)
+			Player.playerimage = SpriteSheet.playerupperleft;
+		if (Keyboard.up && Keyboard.right)
+			Player.playerimage = SpriteSheet.playerupperright;
+		if (Keyboard.down && Keyboard.left)
+			Player.playerimage = SpriteSheet.playerlowerleft;
+		if (Keyboard.down && Keyboard.right)
+			Player.playerimage = SpriteSheet.playerlowerright;
+
+		// System.out.println("Player Pos|X: " + dX + " Y: " + dY);
 
 	}
 
 	public void render(Graphics g) {
 		for (int y = 0; y < MAPHEIGHT; y++) {
 			for (int x = 0; x < MAPWIDTH; x++) {
-				getTile(x, y).render(g, ((x * Tile.TILEWIDTH) + Utilities.xCenter  - spawnX) - dX, ((y * Tile.TILEHEIGHT) + Utilities.yCenter  - spawnY) - dY);
+				getTile(x, y).render(g, ((x * Tile.TILEWIDTH) + Utilities.xCenter - spawnX) - dX, ((y * Tile.TILEHEIGHT) + Utilities.yCenter - spawnY) - dY);
 			}
 		}
-		entity.render(g);
+		entityHandler.render(g);
 	}
 
 	public Tile getTile(int x, int y) {

@@ -1,29 +1,23 @@
 package com.nak.starfire.entity;
 
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 
 public class Entity {
 
-	public static BufferedImage image;
-	public static final int WIDTH = 32, HEIGHT = 32;
+	public static final int WIDTH = 32;
+	public static final int HEIGHT = 32;
 	protected int x, y;
 
-	public Entity(BufferedImage image, int x, int y) {
-		Entity.image = image;
+	public Entity(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
 
-	public void input() {
+	public void render(Graphics g) {
 
 	}
 
 	public void update() {
 
-	}
-
-	public void render(Graphics g) {
-		g.drawImage(image, x, y, WIDTH, HEIGHT, null);
 	}
 }

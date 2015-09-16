@@ -23,7 +23,7 @@ public class MenuState {
 	}
 
 	public void input() {
-		if (Keyboard.space) {
+		if (Keyboard.enter) {
 			GameStateManager.gameState = GameState.LEVELSTATE;
 		}
 	}
