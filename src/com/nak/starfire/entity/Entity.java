@@ -5,12 +5,14 @@ import java.awt.image.BufferedImage;
 
 public class Entity {
 
-	protected BufferedImage image;
+	public static BufferedImage image;
 	public static final int WIDTH = 32, HEIGHT = 32;
-	public static int x, y;
+	protected int x, y;
 
-	public Entity(BufferedImage image) {
-		this.image = image;
+	public Entity(BufferedImage image, int x, int y) {
+		Entity.image = image;
+		this.x = x;
+		this.y = y;
 	}
 
 	public void input() {
@@ -21,7 +23,7 @@ public class Entity {
 
 	}
 
-	public void render(Graphics g, int x, int y) {
+	public void render(Graphics g) {
 		g.drawImage(image, x, y, WIDTH, HEIGHT, null);
 	}
 }

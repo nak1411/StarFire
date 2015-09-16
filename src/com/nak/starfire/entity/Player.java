@@ -1,14 +1,11 @@
 package com.nak.starfire.entity;
 
 import com.nak.starfire.gfx.SpriteSheet;
+import com.nak.starfire.utilities.Utilities;
 
 public class Player extends Entity {
 
-	protected int xPos, yPos;
-
-	public Player(int xPos, int yPos) {
-		super(SpriteSheet.player);
-		this.xPos = xPos;
-		this.yPos = yPos;
+	public Player(int x, int y) {
+		super(SpriteSheet.playerup, Utilities.xCenter, Utilities.yCenter);
 	}
 }

@@ -2,42 +2,75 @@ package com.nak.starfire.gamestate;
 
 import java.awt.Graphics;
 
-import com.nak.starfire.Game;
+import com.nak.starfire.entity.Entity;
 import com.nak.starfire.entity.Player;
+import com.nak.starfire.gfx.SpriteSheet;
 import com.nak.starfire.input.Keyboard;
 import com.nak.starfire.tile.Tile;
 import com.nak.starfire.utilities.Utilities;
 
 public class LevelState {
 
-	private Player player;
-	private int width, height;
+	private Entity entity;
+	public static final int MAPWIDTH = 25, MAPHEIGHT = 23;
 	private int[][] tiles;
 	private int dX, dY;
-	private int xSpawn = (Game.WIDTH * Game.SCALE / 2) - 12;
-	private int ySpawn = (Game.HEIGHT * Game.SCALE / 2) - 24;
+	private int spawnX = 0;
+	private int spawnY = 0;
 	private int xVel = 2;
 	private int yVel = 2;
 
 	public LevelState(String path) {
-		player = new Player(xSpawn, ySpawn);
+		entity = new Player(spawnX, spawnY);
 		loadLevel(path);
 	}
 
 	public void update() {
-		if(Keyboard.left) dX -= xVel;
-		if(Keyboard.right) dX += xVel;
-		if(Keyboard.up) dY -= yVel;
-		if(Keyboard.down) dY += yVel;
+		if(dX >= 0){
+			if(Keyboard.left){
+				dX -= xVel;
+				Entity.image = SpriteSheet.playerright;
+			}
+		}
+		
+		if(dX <= (Tile.TILEWIDTH * MAPWIDTH) - Tile.TILEWIDTH){
+			if(Keyboard.right){
+				dX += xVel;
+				Entity.image = SpriteSheet.playerleft;
+			}
+		}
+		
+		if(dY >= 0){
+			if(Keyboard.up){
+				dY -= yVel;
+				Entity.image = SpriteSheet.playerup;
+			}
+		}
+		
+		if(dY <= (Tile.TILEHEIGHT * MAPHEIGHT) - Tile.TILEHEIGHT){
+			if(Keyboard.down){
+				dY += yVel;
+				Entity.image = SpriteSheet.playerdown;
+			}
+		}
+		
+		//Handle angled sprite animation
+		if(Keyboard.up && Keyboard.left) Entity.image = SpriteSheet.playerupperleft;
+		if(Keyboard.up && Keyboard.right) Entity.image = SpriteSheet.playerupperright;
+		if(Keyboard.down && Keyboard.left) Entity.image = SpriteSheet.playerlowerleft;
+		if(Keyboard.down && Keyboard.right) Entity.image = SpriteSheet.playerlowerright;
+
+		//System.out.println("Player Pos|X: " + dX + " Y: " + dY);
+
 	}
 
 	public void render(Graphics g) {
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				getTile(x, y).render(g, (x * Tile.TILEWIDTH) - dX, (y * Tile.TILEHEIGHT) - dY);
+		for (int y = 0; y < MAPHEIGHT; y++) {
+			for (int x = 0; x < MAPWIDTH; x++) {
+				getTile(x, y).render(g, ((x * Tile.TILEWIDTH) + Utilities.xCenter  - spawnX) - dX, ((y * Tile.TILEHEIGHT) + Utilities.yCenter  - spawnY) - dY);
 			}
 		}
-		player.render(g, xSpawn, ySpawn);
+		entity.render(g);
 	}
 
 	public Tile getTile(int x, int y) {
@@ -51,12 +84,10 @@ public class LevelState {
 	public void loadLevel(String path) {
 		String file = Utilities.loadFileAsString(path);
 		String[] tileIndex = file.split("\\s+");
-		width = 24;
-		height = 22;
-		tiles = new int[width][height];
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				tiles[x][y] = Utilities.parseInt(tileIndex[(x + y * width)]);
+		tiles = new int[MAPWIDTH][MAPHEIGHT];
+		for (int y = 0; y < MAPHEIGHT; y++) {
+			for (int x = 0; x < MAPWIDTH; x++) {
+				tiles[x][y] = Utilities.parseInt(tileIndex[(x + y * MAPWIDTH)]);
 			}
 		}
 	}
