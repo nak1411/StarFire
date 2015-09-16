@@ -1,0 +1,69 @@
+Gameplan for Starfire
+
+Game Type: Space RPG
+
+Style: Top-Down Retro
+
+Overview:
+
+	[X]Game Loop
+	
+	[X]Tile System / Spritesheet
+
+	[]UI Layout 
+
+	[X]Input Mouse and Keyboard
+
+	[]Entities(player, enemies)
+
+	[]Collision
+
+	[]State Manager + states
+
+	[]Items
+
+	[]Stats Handling (levels, health, armor, etc)
+
+	[]AI?
+
+	[]Sound
+
+	[]Saving, serialization
+
+	[]Options / Config
+
+	[]Gameplay / Rules
+
+	[]Balancing
+
+	[]...
+		
+		
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////		
+		  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
