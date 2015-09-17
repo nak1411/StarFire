@@ -15,7 +15,7 @@ public class LevelState {
 
 	public static final int MAPWIDTH = 25, MAPHEIGHT = 23;
 	private int[][] tiles;
-	private int dX, dY;
+	public static int dX, dY;
 	private int spawnX = 0;
 	private int spawnY = 0;
 	private int xVel = 2;
