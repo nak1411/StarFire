@@ -2,34 +2,30 @@ package com.nak.starfire.entity;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 import com.nak.starfire.gamestate.LevelState;
 import com.nak.starfire.gfx.SpriteSheet;
-import com.nak.starfire.utilities.Utilities;
 
-public class Bullet {
+public class Bullet implements Entity {
 
 	private BufferedImage image;
-	private int dX = 5, dY = 5;
-	private int x, y;
-
-
-	public Bullet(BufferedImage image, int x, int y) {
+	private int bulletVel = 5;
+	private int spawnX, spawnY;
+	
+	public Bullet(BufferedImage image, int spawnX, int spawnY) {
 		this.image = image;
-		this.x = x;
-		this.y = y;
+		this.spawnX = spawnX;
+		this.spawnY = spawnY;
 	}
 
 	public void render(Graphics g) {
-		g.drawImage(image, x, y, Entity.WIDTH, Entity.HEIGHT, null);
+		g.drawImage(image, spawnX - LevelState.dX, spawnY - LevelState.dY, Entity.WIDTH, Entity.HEIGHT, null);
 	}
 
 	public void update() {
-		if(image == SpriteSheet.bulletup) y-= dY;
-		if(image == SpriteSheet.bulletdown) y += dY;
-		if(image == SpriteSheet.bulletleft) x += dX;
-		if(image == SpriteSheet.bulletright) x -= dX;
+		if(image == SpriteSheet.bulletup) spawnY -= bulletVel;
+		if(image == SpriteSheet.bulletdown) spawnY += bulletVel;
+		if(image == SpriteSheet.bulletleft) spawnX += bulletVel;
+		if(image == SpriteSheet.bulletright) spawnX -= bulletVel;
 	}
-
 }
