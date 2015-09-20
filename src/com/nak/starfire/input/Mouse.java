@@ -2,18 +2,24 @@ package com.nak.starfire.input;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
-public class Mouse implements MouseListener {
+import com.nak.starfire.utilities.Vector2i;
 
+public class Mouse implements MouseListener, MouseMotionListener {
+
+	public static Vector2i mouseVec;
 	private boolean[] buttons = new boolean[4];
-	private boolean left, right, middle;
+	public static boolean left, right, middle;
+
+	public Mouse() {
+		mouseVec = new Vector2i();
+	}
 
 	public void update() {
-
 		left = buttons[MouseEvent.BUTTON1];
 		middle = buttons[MouseEvent.BUTTON2];
 		right = buttons[MouseEvent.BUTTON3];
-
 	}
 
 	public void mouseClicked(MouseEvent e) {
@@ -34,27 +40,12 @@ public class Mouse implements MouseListener {
 		buttons[e.getButton()] = true;
 	}
 
-	public boolean isLeft() {
-		return left;
+	public void mouseDragged(MouseEvent e) {
+
 	}
 
-	public void setLeft(boolean left) {
-		this.left = left;
-	}
-
-	public boolean isRight() {
-		return right;
-	}
-
-	public void setRight(boolean right) {
-		this.right = right;
-	}
-
-	public boolean isMiddle() {
-		return middle;
-	}
-
-	public void setMiddle(boolean middle) {
-		this.middle = middle;
+	public void mouseMoved(MouseEvent e) {
+		mouseVec.setX(e.getX());
+		mouseVec.setY(e.getY());
 	}
 }

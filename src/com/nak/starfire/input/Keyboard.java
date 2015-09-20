@@ -15,7 +15,6 @@ public class Keyboard implements KeyListener {
 		right = keys[KeyEvent.VK_RIGHT] || keys[KeyEvent.VK_D];
 		enter = keys[KeyEvent.VK_ENTER];
 		space = keys[KeyEvent.VK_SPACE];
-
 	}
 
 	public void keyPressed(KeyEvent e) {

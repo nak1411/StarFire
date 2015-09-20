@@ -34,6 +34,7 @@ public class Game extends Canvas implements Runnable {
 
 		addKeyListener(keyboard);
 		addMouseListener(mouse);
+		addMouseMotionListener(mouse);
 		requestFocus();
 	}
 

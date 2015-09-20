@@ -77,7 +77,6 @@ public class LevelState {
 			bullet = bullets.get(i);
 			bullet.update();
 		}
-
 	}
 
 	public void render(Graphics g) {
@@ -87,7 +86,6 @@ public class LevelState {
 			}
 		}
 		entityHandler.render(g);
-		
 		for (int i = 0; i < bullets.size(); i++) {
 			bullet = bullets.get(i);
 			bullet.render(g);
