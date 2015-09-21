@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.nak.starfire.Game;
 import com.nak.starfire.entity.Bullet;
 import com.nak.starfire.entity.Entity;
 import com.nak.starfire.entity.Projectile;
@@ -19,8 +20,6 @@ public class Level {
 	public int dX, dY;
 	private int shipVelX = 2;
 	private int shipVelY = 2;
-	public int spawnX = 100;
-	public int spawnY = 100;
 	private Font font = new Font("Calibri", Font.BOLD, 24);
 
 	private List<Entity> entities = new ArrayList<Entity>();
@@ -31,25 +30,25 @@ public class Level {
 	}
 
 	public void update() {
-		if (dX >= 0 - spawnX + 7) {
+		if (dX >= 7) {
 			if (Keyboard.left) {
 				dX -= shipVelX;
 			}
 		}
 
-		if (dX <= ((Tile.TILEWIDTH * Level.MAPWIDTH) - Tile.TILEWIDTH) - spawnX + 7) {
+		if (dX <= ((Tile.TILEWIDTH * Level.MAPWIDTH) - Tile.TILEWIDTH) + 7) {
 			if (Keyboard.right) {
 				dX += shipVelX;
 			}
 		}
 
-		if (dY >= 0 - spawnY) {
+		if (dY >= 0) {
 			if (Keyboard.up) {
 				dY -= shipVelY;
 			}
 		}
 
-		if (dY <= ((Tile.TILEHEIGHT * Level.MAPHEIGHT) - Tile.TILEHEIGHT) - spawnY) {
+		if (dY <= ((Tile.TILEHEIGHT * Level.MAPHEIGHT) - Tile.TILEHEIGHT)) {
 			if (Keyboard.down) {
 				dY += shipVelY;
 			}
@@ -62,7 +61,7 @@ public class Level {
 	public void render(Graphics g) {
 		for (int y = 0; y < MAPHEIGHT; y++) {
 			for (int x = 0; x < MAPWIDTH; x++) {
-				getTile(x, y).render(g, ((x * Tile.TILEWIDTH) + Utilities.xCenter - spawnX) - dX, ((y * Tile.TILEHEIGHT) + Utilities.yCenter - spawnY) - dY);
+				getTile(x, y).render(g, ((x * Tile.TILEWIDTH) + (Game.WIDTH * Game.SCALE) / 2) - dX, ((y * Tile.TILEHEIGHT) + (Game.HEIGHT * Game.SCALE) / 2) - dY);
 			}
 		}
 

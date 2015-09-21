@@ -4,9 +4,9 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import com.nak.starfire.Game;
 import com.nak.starfire.level.Level;
 import com.nak.starfire.tile.Tile;
-import com.nak.starfire.utilities.Utilities;
 
 public class Bullet extends Projectile{
 
@@ -21,8 +21,8 @@ public class Bullet extends Projectile{
 		velocity = 4;
 		nx = velocity * Math.cos(angle);
 		ny = velocity * Math.sin(angle);
-		this.x = Utilities.xCenter + x;
-		this.y = y + Utilities.yCenter;
+		this.x = x + (Game.WIDTH * Game.SCALE) / 2;
+		this.y = y + (Game.HEIGHT * Game.SCALE) / 2;
 		level.add(this);
 	}
 
@@ -34,10 +34,10 @@ public class Bullet extends Projectile{
 	}
 
 	public void update() {
-		if (x <= (((Tile.TILEWIDTH * 10) + 10) - level.dX)
-			|| (x >= (Tile.TILEWIDTH * Level.MAPWIDTH) + (Tile.TILEWIDTH * 10 - 7) - level.dX)
-			|| (y >= (Tile.TILEHEIGHT * Level.MAPHEIGHT) + (Tile.TILEHEIGHT * 9 + 4) - level.dY)
-			|| (y <= (((Tile.TILEHEIGHT * 10) - 10) - level.dY))) {
+		if (x <= (Level.MAPWIDTH - Tile.TILEWIDTH) + (Game.WIDTH * Game.SCALE / 2) - level.dX
+			|| (x >= (Tile.TILEWIDTH * Level.MAPWIDTH - Tile.TILEWIDTH) + ((Game.WIDTH * Game.SCALE / 2) + 10) - level.dX)
+			|| (y >= (Tile.TILEHEIGHT * Level.MAPHEIGHT - Tile.TILEHEIGHT) + ((Game.HEIGHT * Game.SCALE / 2) + 8) - level.dY)
+			|| (y <= (Level.MAPHEIGHT - Tile.TILEHEIGHT) + (Game.HEIGHT * Game.SCALE / 2) - level.dY)) {
 			level.remove(this);
 		}	
 		y += ny;

@@ -4,14 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import com.nak.starfire.Game;
-
 public class Utilities {
-	
-	//Centers stuff to the screen.  Useful for player entity.
-	//NOTE: Currently set for 32x32 sprites.
-	public static int xCenter = (Game.WIDTH * Game.SCALE / 2) - 12;
-	public static int yCenter = (Game.HEIGHT * Game.SCALE / 2) - 32;
 
 	public static String loadFileAsString(String path) {
 		StringBuilder builder = new StringBuilder();

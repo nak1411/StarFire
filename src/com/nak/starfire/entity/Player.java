@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import com.nak.starfire.Game;
 import com.nak.starfire.gfx.SpriteSheet;
 import com.nak.starfire.input.Mouse;
 import com.nak.starfire.level.Level;
@@ -16,7 +17,7 @@ public class Player extends Mob {
 	public static BufferedImage playerimage = SpriteSheet.playerup;
 	private Level level ;
 	private double dirInDeg;
-	private int rateOfFire = 9;
+	private int rateOfFire = 10;
 	private long nextBullet = 0;
 	private long bulletDelay = Time.SECOND - (100000000 * rateOfFire);;
 	private Font font = new Font("Calibri", Font.BOLD, 24);
@@ -28,9 +29,9 @@ public class Player extends Mob {
 	public void render(Graphics g) {
 		g.setColor(Color.WHITE);
 		g.setFont(font);
-		g.drawString("X: " + String.valueOf((level.spawnX + level.dX) - 6), 10, 20);
-		g.drawString("Y: " + String.valueOf((level.spawnY + level.dY) + 2), 80, 20);
-		g.drawImage(playerimage, Utilities.xCenter - 7, Utilities.yCenter, WIDTH, HEIGHT, null);
+		g.drawString("X: " + String.valueOf((level.dX) - 6), 10, 20);
+		g.drawString("Y: " + String.valueOf((level.dY) + 2), 80, 20);
+		g.drawImage(playerimage, (Game.WIDTH * Game.SCALE) / 2 - 7, (Game.HEIGHT * Game.SCALE) / 2 , WIDTH, HEIGHT, null);
 		g.setColor(Color.WHITE);
 		g.setFont(font);
 		g.drawString("ROF: " + String.valueOf(rateOfFire), 10, 50);
@@ -60,11 +61,10 @@ public class Player extends Mob {
 		if (Mouse.left && Time.getTime() > nextBullet) {
 			nextBullet = Time.getTime() + bulletDelay;
 
-			double dx = Mouse.mouseVec.getX() - Utilities.xCenter - 16;
-			double dy = Mouse.mouseVec.getY() - Utilities.yCenter - 16;
+			double dx = Mouse.mouseVec.getX() - (Game.WIDTH * Game.SCALE) / 2 - 16;
+			double dy = Mouse.mouseVec.getY() - (Game.HEIGHT * Game.SCALE) / 2 - 16;
 			double dir = Math.atan2(dy, dx);
 			dirInDeg = Math.toDegrees(dir);
-			System.err.println(dirInDeg);
 
 			level.addBullet(new Bullet(level, SpriteSheet.bulletup, x, y, dir));
 			
