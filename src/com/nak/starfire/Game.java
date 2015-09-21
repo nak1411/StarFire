@@ -19,8 +19,8 @@ public class Game extends Canvas implements Runnable {
 	private GameStateManager gsm;
 	private Assets assets;
 
-	public static final int HEIGHT = 127;
-	public static final int WIDTH = 128;
+	public static final int HEIGHT = 300;
+	public static final int WIDTH = 300;
 	public static final String TITLE = "StarFire";
 	public static final int SCALE = 3;
 	private boolean running = false;
@@ -87,7 +87,9 @@ public class Game extends Canvas implements Runnable {
 
 			if (System.currentTimeMillis() - lastTimer1 > 1000) {
 				lastTimer1 += 1000;
-				// System.out.println(ticks + " ticks, " + frames + " fps");
+				if(Keyboard.enter){
+					System.out.println(ticks + " ticks, " + frames + " fps");
+				}
 				frames = 0;
 				ticks = 0;
 			}

@@ -2,10 +2,9 @@ package com.nak.starfire.gfx;
 
 import java.awt.image.BufferedImage;
 
-import com.nak.starfire.entity.Entity;
-import com.nak.starfire.tile.Tile;
-
 public class SpriteSheet {
+
+	private static int WIDTH, HEIGHT;
 
 	public static BufferedImage spritesheet, tilesheet;
 	public static BufferedImage starTile, voidTile;
@@ -14,28 +13,33 @@ public class SpriteSheet {
 	public static BufferedImage bulletup, bulletdown, bulletleft, bulletright;
 	public static BufferedImage bullletupperleft, bulletupperright, bulletlowerleft, bulletlowerright;
 
-	public static void init() {
+	public SpriteSheet(int width, int height) {
+		SpriteSheet.WIDTH = width;
+		SpriteSheet.HEIGHT = height;
+	}
+
+	public void init() {
 
 		tilesheet = ImageLoader.loadImage("/tilesheet.png");
 		spritesheet = ImageLoader.loadImage("/spritesheet.png");
 
 		// TILE SPRITES
-		starTile = tilesheet.getSubimage(0, 0, Tile.TILEWIDTH, Tile.TILEHEIGHT);
-		voidTile = tilesheet.getSubimage(Tile.TILEWIDTH, 0, Tile.TILEWIDTH, Tile.TILEHEIGHT);
+		starTile = tilesheet.getSubimage(0, 0, WIDTH, HEIGHT);
+		voidTile = tilesheet.getSubimage(WIDTH, 0, WIDTH, HEIGHT);
 
 		// ENTITY SPRITES
-		playerup = spritesheet.getSubimage(0, 0, Entity.WIDTH, Entity.HEIGHT);
-		playerleft = spritesheet.getSubimage(Tile.TILEWIDTH, 0, Entity.WIDTH, Entity.HEIGHT);
-		playerdown = spritesheet.getSubimage(Tile.TILEWIDTH * 2, 0, Entity.WIDTH, Entity.HEIGHT);
-		playerright = spritesheet.getSubimage(Tile.TILEWIDTH * 3, 0, Entity.WIDTH, Entity.HEIGHT);
-		playerupperright = spritesheet.getSubimage(0, Tile.TILEHEIGHT, Entity.WIDTH, Entity.HEIGHT);
-		playerupperleft = spritesheet.getSubimage(Tile.TILEWIDTH, Tile.TILEHEIGHT, Entity.WIDTH, Entity.HEIGHT);
-		playerlowerleft = spritesheet.getSubimage(Tile.TILEWIDTH * 2, Tile.TILEHEIGHT, Entity.WIDTH, Entity.HEIGHT);
-		playerlowerright = spritesheet.getSubimage(Tile.TILEWIDTH * 3, Tile.TILEHEIGHT, Entity.WIDTH, Entity.HEIGHT);
-		bulletup = spritesheet.getSubimage(0, Tile.TILEHEIGHT * 2, Entity.WIDTH, Entity.HEIGHT);
-		bulletdown = spritesheet.getSubimage(Tile.TILEWIDTH, Tile.TILEHEIGHT * 2, Entity.WIDTH, Entity.HEIGHT);
-		bulletright = spritesheet.getSubimage(Tile.TILEWIDTH * 2, Tile.TILEHEIGHT * 2, Entity.WIDTH, Entity.HEIGHT);
-		bulletleft = spritesheet.getSubimage(Tile.TILEWIDTH * 3, Tile.TILEHEIGHT * 2, Entity.WIDTH, Entity.HEIGHT);
+		playerup = spritesheet.getSubimage(0, 0, WIDTH, HEIGHT);
+		playerleft = spritesheet.getSubimage(WIDTH, 0, WIDTH, HEIGHT);
+		playerdown = spritesheet.getSubimage(WIDTH * 2, 0, WIDTH, HEIGHT);
+		playerright = spritesheet.getSubimage(WIDTH * 3, 0, WIDTH, HEIGHT);
+		playerupperright = spritesheet.getSubimage(0, HEIGHT, WIDTH, HEIGHT);
+		playerupperleft = spritesheet.getSubimage(WIDTH, HEIGHT, WIDTH, HEIGHT);
+		playerlowerleft = spritesheet.getSubimage(WIDTH * 2, HEIGHT, WIDTH, HEIGHT);
+		playerlowerright = spritesheet.getSubimage(WIDTH * 3, HEIGHT, WIDTH, HEIGHT);
+		bulletup = spritesheet.getSubimage(0, HEIGHT * 2, WIDTH, HEIGHT);
+		bulletdown = spritesheet.getSubimage(HEIGHT, HEIGHT * 2, WIDTH, HEIGHT);
+		bulletright = spritesheet.getSubimage(HEIGHT * 2, HEIGHT * 2, WIDTH, HEIGHT);
+		bulletleft = spritesheet.getSubimage(WIDTH * 3, HEIGHT* 2, WIDTH, HEIGHT);
 
 	}
 }

@@ -41,7 +41,8 @@ public class Mouse implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseDragged(MouseEvent e) {
-
+		mouseVec.setX(e.getX());
+		mouseVec.setY(e.getY());
 	}
 
 	public void mouseMoved(MouseEvent e) {

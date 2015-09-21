@@ -1,55 +1,46 @@
 package com.nak.starfire.entity;
 
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import com.nak.starfire.gamestate.LevelState;
-import com.nak.starfire.gfx.SpriteSheet;
-import com.nak.starfire.input.Mouse;
+import com.nak.starfire.level.Level;
 import com.nak.starfire.tile.Tile;
 import com.nak.starfire.utilities.Utilities;
-import com.nak.starfire.utilities.Vector2i;
 
-public class Bullet implements Entity {
+public class Bullet extends Projectile{
 
 	private BufferedImage image;
-	private EntityHandler handler;
-	public static Vector2i bulletVec;
-	private double length;
-	public static double angle;
-	private int bulletVel = 5;
-	private int spawnX, spawnY;
-	private int vx, vy;
-	
-	public Bullet(BufferedImage image, int spawnX, int spawnY, EntityHandler handler) {
+	private Level level;
+	private Font font = new Font("Calibri", Font.BOLD, 24);
+
+	public Bullet(Level level, BufferedImage image, double x, double y, double dir) {
+		super(x, y, dir);
 		this.image = image;
-		this.spawnX = spawnX;
-		this.spawnY = spawnY;
-		this.handler = handler;
-		bulletVec = new Vector2i(Mouse.mouseVec.getX() - spawnX, Mouse.mouseVec.getY() - spawnY);
-		angle = Math.atan2(bulletVec.getX(), bulletVec.getY());
+		this.level = level;
+		velocity = 4;
+		nx = velocity * Math.cos(angle);
+		ny = velocity * Math.sin(angle);
+		this.x = Utilities.xCenter + x;
+		this.y = y + Utilities.yCenter;
+		level.add(this);
 	}
 
 	public void render(Graphics g) {
-		
-			g.drawImage(image, (int) spawnX - LevelState.dX, spawnY - LevelState.dY, Entity.WIDTH, Entity.HEIGHT, null);
+	
+		if(!isRemoved()){
+			g.drawImage(image, (int)x, (int)y, WIDTH, HEIGHT, null);
+		}
 	}
 
 	public void update() {
-
-		System.out.println(angle);
-		
-		if (spawnX <= (Tile.TILEWIDTH + Utilities.xCenter - spawnX) - (Tile.TILEWIDTH * 2) - 8
-			|| (spawnX >= Tile.TILEWIDTH * LevelState.MAPWIDTH + (Tile.TILEWIDTH * 2) - 3)
-			|| (spawnY >= Tile.TILEHEIGHT * LevelState.MAPHEIGHT + (Tile.TILEHEIGHT) + 12)
-			|| (spawnY <= (Tile.TILEHEIGHT + Utilities.yCenter - spawnY) - (Tile.TILEHEIGHT * 2) - 24)) {
-			
-				handler.removeEntity(this);
-		}
-			
-		if(image == SpriteSheet.bulletup) spawnY -= bulletVel;
-		if(image == SpriteSheet.bulletdown) spawnY += bulletVel;
-		if(image == SpriteSheet.bulletleft) spawnX += bulletVel;
-		if(image == SpriteSheet.bulletright) spawnX -= bulletVel;
+		if (x <= (((Tile.TILEWIDTH * 10) + 10) - level.dX)
+			|| (x >= (Tile.TILEWIDTH * Level.MAPWIDTH) + (Tile.TILEWIDTH * 10 - 7) - level.dX)
+			|| (y >= (Tile.TILEHEIGHT * Level.MAPHEIGHT) + (Tile.TILEHEIGHT * 9 + 4) - level.dY)
+			|| (y <= (((Tile.TILEHEIGHT * 10) - 10) - level.dY))) {
+			level.remove(this);
+		}	
+		y += ny;
+		x += nx;
 	}
 }

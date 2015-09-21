@@ -2,12 +2,29 @@ package com.nak.starfire.entity;
 
 import java.awt.Graphics;
 
-public interface Entity {
+public abstract class Entity {
 
-	public final int WIDTH = 32;
-	public final int HEIGHT = 32;
+	protected double x, y;
+	public static final int WIDTH = 32;
+	public static final int HEIGHT = 32;
+	private boolean removed = false;
+	
+	public Entity(){
+	}
 
-	public abstract void render(Graphics g);
+	public void render(Graphics g) {
 
-	public abstract void update();
+	}
+
+	public void update() {
+
+	}
+
+	public void remove() {
+		removed = true;
+	}
+
+	public boolean isRemoved() {
+		return removed;
+	}
 }
