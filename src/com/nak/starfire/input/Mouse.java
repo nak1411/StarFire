@@ -9,7 +9,7 @@ import com.nak.starfire.utilities.Vector2i;
 public class Mouse implements MouseListener, MouseMotionListener {
 
 	public static Vector2i mouseVec;
-	private boolean[] buttons = new boolean[4];
+	private boolean[] buttons = new boolean[256];
 	public static boolean left, right, middle;
 
 	public Mouse() {
@@ -23,6 +23,8 @@ public class Mouse implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseClicked(MouseEvent e) {
+		mouseVec.setX(e.getX());
+		mouseVec.setY(e.getY());
 
 	}
 
@@ -31,6 +33,7 @@ public class Mouse implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseEntered(MouseEvent e) {
+		
 	}
 
 	public void mouseExited(MouseEvent e) {

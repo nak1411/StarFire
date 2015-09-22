@@ -8,12 +8,14 @@ public class Tile {
 	protected BufferedImage image;
 	public static final int TILEWIDTH = 32, TILEHEIGHT = 32;
 	public static Tile[] tiles = new Tile[8];
+	public static int id;
 
 	public static Tile voidTile = new VoidTile(0);
 	public static Tile starTile = new StarTile(1);
 
 	public Tile(BufferedImage image, int id) {
 		this.image = image;
+		Tile.id = id;
 		tiles[id] = this;
 	}
 

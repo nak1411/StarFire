@@ -1,6 +1,5 @@
 package com.nak.starfire.level;
 
-import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +14,11 @@ import com.nak.starfire.utilities.Utilities;
 
 public class Level {
 
-	public static final int MAPWIDTH = 25, MAPHEIGHT = 23;
+	public static int MAPWIDTH = 20, MAPHEIGHT = 20;
 	private int[][] tiles;
 	public int dX, dY;
 	private int shipVelX = 2;
 	private int shipVelY = 2;
-	private Font font = new Font("Calibri", Font.BOLD, 24);
 
 	private List<Entity> entities = new ArrayList<Entity>();
 	private List<Projectile> bullets = new ArrayList<Projectile>();
@@ -100,7 +98,7 @@ public class Level {
 		tiles = new int[MAPWIDTH][MAPHEIGHT];
 		for (int y = 0; y < MAPHEIGHT; y++) {
 			for (int x = 0; x < MAPWIDTH; x++) {
-				tiles[x][y] = Utilities.parseInt(tileIndex[(x + y * MAPWIDTH)]);
+				tiles[x][y] = Utilities.parseInt(tileIndex[(x + y * MAPWIDTH) + 1]);
 			}
 		}
 	}

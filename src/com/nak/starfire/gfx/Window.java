@@ -1,6 +1,8 @@
 package com.nak.starfire.gfx;
 
 import java.awt.Dimension;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 
 import javax.swing.JFrame;
 
@@ -12,22 +14,33 @@ public class Window {
 	private Dimension size;
 
 	public Window(int width, int height, int scale, String title, Game game) {
+		
 		size = new Dimension(width * scale, height * scale);
 		frame = new JFrame(title);
 
 		frame.setPreferredSize(size);
-		frame.setMaximumSize(size);
-		frame.setMinimumSize(size);
-
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.add(game);
-		frame.setLocationRelativeTo(null);
 		frame.setSize(size);
 		frame.setResizable(false);
 		frame.setVisible(true);
-
+		frame.setLocationRelativeTo(null);
+		showOnScreen(2, frame);
+		
 		game.start();
 
+	}
+	
+	public static void showOnScreen( int screen, JFrame frame ) {
+	    GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+	    GraphicsDevice[] gd = ge.getScreenDevices();
+	    if( screen > -1 && screen < gd.length ) {
+	        frame.setLocation(gd[screen].getDefaultConfiguration().getBounds().x, frame.getY());
+	    } else if( gd.length > 0 ) {
+	        frame.setLocation(gd[0].getDefaultConfiguration().getBounds().x, frame.getY());
+	    } else {
+	        throw new RuntimeException( "No Screens Found" );
+	    }
 	}
 }

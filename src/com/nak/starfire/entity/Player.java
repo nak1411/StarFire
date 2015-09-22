@@ -10,7 +10,6 @@ import com.nak.starfire.gfx.SpriteSheet;
 import com.nak.starfire.input.Mouse;
 import com.nak.starfire.level.Level;
 import com.nak.starfire.utilities.Time;
-import com.nak.starfire.utilities.Utilities;
 
 public class Player extends Mob {
 
@@ -19,7 +18,7 @@ public class Player extends Mob {
 	private double dirInDeg;
 	private int rateOfFire = 10;
 	private long nextBullet = 0;
-	private long bulletDelay = Time.SECOND - (100000000 * rateOfFire);;
+	private long bulletDelay = Time.SECOND - (100000000 * rateOfFire);
 	private Font font = new Font("Calibri", Font.BOLD, 24);
 
 	public Player(Level level) {
@@ -27,10 +26,6 @@ public class Player extends Mob {
 	}
 
 	public void render(Graphics g) {
-		g.setColor(Color.WHITE);
-		g.setFont(font);
-		g.drawString("X: " + String.valueOf((level.dX) - 6), 10, 20);
-		g.drawString("Y: " + String.valueOf((level.dY) + 2), 80, 20);
 		g.drawImage(playerimage, (Game.WIDTH * Game.SCALE) / 2 - 7, (Game.HEIGHT * Game.SCALE) / 2 , WIDTH, HEIGHT, null);
 		g.setColor(Color.WHITE);
 		g.setFont(font);

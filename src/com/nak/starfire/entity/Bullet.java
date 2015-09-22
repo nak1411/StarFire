@@ -1,6 +1,5 @@
 package com.nak.starfire.entity;
 
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -12,7 +11,6 @@ public class Bullet extends Projectile{
 
 	private BufferedImage image;
 	private Level level;
-	private Font font = new Font("Calibri", Font.BOLD, 24);
 
 	public Bullet(Level level, BufferedImage image, double x, double y, double dir) {
 		super(x, y, dir);

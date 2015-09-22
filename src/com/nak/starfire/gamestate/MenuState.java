@@ -26,5 +26,8 @@ public class MenuState {
 		if (Keyboard.space) {
 			GameStateManager.gameState = GameState.LEVELSTATE;
 		}
+		if (Keyboard.e) {
+			GameStateManager.gameState = GameState.EDITORSTATE;
+		}
 	}
 }

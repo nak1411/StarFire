@@ -7,6 +7,7 @@ public class GameStateManager {
 	public static GameState gameState = GameState.MENUSTATE;
 	public static MenuState menuState;
 	public static LevelState levelState;
+	public static EditorState editorState;
 
 	public void update() {
 		switch (gameState) {
@@ -19,9 +20,17 @@ public class GameStateManager {
 			break;
 		case LEVELSTATE:
 			if (levelState == null) {
-				levelState = new LevelState("/level1.txt");
+				levelState = new LevelState("res/level1.txt");
 			}
 			levelState.update();
+			levelState.input();
+			break;
+		case EDITORSTATE:
+			if (editorState == null) {
+				editorState = new EditorState();
+			}
+			editorState.update();
+			editorState.input();
 			break;
 		default:
 		}
@@ -40,6 +49,12 @@ public class GameStateManager {
 				levelState = new LevelState("res/level1.txt");
 			}
 			levelState.render(g);
+			break;
+		case EDITORSTATE:
+			if (editorState == null) {
+				editorState = new EditorState();
+			}
+			editorState.render(g);
 			break;
 		default:
 		}
