@@ -24,8 +24,8 @@ public class SpriteSheet {
 		spritesheet = ImageLoader.loadImage("/spritesheet.png");
 
 		// TILE SPRITES
-		starTile = tilesheet.getSubimage(0, 0, WIDTH, HEIGHT);
-		voidTile = tilesheet.getSubimage(WIDTH, 0, WIDTH, HEIGHT);
+		starTile = tilesheet.getSubimage(WIDTH, 0, WIDTH, HEIGHT);
+		voidTile = tilesheet.getSubimage(0, 0, WIDTH, HEIGHT);
 
 		// ENTITY SPRITES
 		playerup = spritesheet.getSubimage(0, 0, WIDTH, HEIGHT);

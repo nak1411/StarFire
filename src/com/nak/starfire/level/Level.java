@@ -14,8 +14,9 @@ import com.nak.starfire.utilities.Utilities;
 
 public class Level {
 
-	public static int MAPWIDTH = 20, MAPHEIGHT = 20;
+	private int mapwidth, mapheight;
 	private int[][] tiles;
+	private int xOff, yOff;
 	public int dX, dY;
 	private int shipVelX = 2;
 	private int shipVelY = 2;
@@ -28,13 +29,34 @@ public class Level {
 	}
 
 	public void update() {
+		for (int i = 0; i < entities.size(); i++) {
+			entities.get(i).update();
+		}
+		
+		xOff = ((Game.WIDTH * Game.SCALE) / 2) - dX;
+		yOff = ((Game.HEIGHT * Game.SCALE) / 2) - dY;
+	}
+
+	public void render(Graphics g) {
+		for (int y = 0; y < mapheight; y++) {
+			for (int x = 0; x < mapwidth; x++) {
+				getTile(x, y).render(g, (x * Tile.TILEWIDTH) + xOff, (y * Tile.TILEHEIGHT) + yOff);
+			}
+		}
+
+		for (int i = 0; i < entities.size(); i++) {
+			entities.get(i).render(g);
+		}
+	}
+	
+	public void input(){
 		if (dX >= 7) {
 			if (Keyboard.left) {
 				dX -= shipVelX;
 			}
 		}
 
-		if (dX <= ((Tile.TILEWIDTH * Level.MAPWIDTH) - Tile.TILEWIDTH) + 7) {
+		if (dX <= ((Tile.TILEWIDTH * mapwidth) - Tile.TILEWIDTH) + 7) {
 			if (Keyboard.right) {
 				dX += shipVelX;
 			}
@@ -46,34 +68,19 @@ public class Level {
 			}
 		}
 
-		if (dY <= ((Tile.TILEHEIGHT * Level.MAPHEIGHT) - Tile.TILEHEIGHT)) {
+		if (dY <= ((Tile.TILEHEIGHT * mapheight) - Tile.TILEHEIGHT)) {
 			if (Keyboard.down) {
 				dY += shipVelY;
 			}
 		}
-		for (int i = 0; i < entities.size(); i++) {
-			entities.get(i).update();
-		}
 	}
 
-	public void render(Graphics g) {
-		for (int y = 0; y < MAPHEIGHT; y++) {
-			for (int x = 0; x < MAPWIDTH; x++) {
-				getTile(x, y).render(g, ((x * Tile.TILEWIDTH) + (Game.WIDTH * Game.SCALE) / 2) - dX, ((y * Tile.TILEHEIGHT) + (Game.HEIGHT * Game.SCALE) / 2) - dY);
-			}
-		}
-
-		for (int i = 0; i < entities.size(); i++) {
-			entities.get(i).render(g);
-		}
-	}
-
-	public void add(Entity e) {
-		entities.add(e);
+	public void add(Entity entity) {
+		entities.add(entity);
 	}
 	
-	public void remove(Entity e) {
-		entities.remove(e);
+	public void remove(Entity entity) {
+		entities.remove(entity);
 	}
 	
 	public void addBullet(Bullet bullet) {
@@ -95,11 +102,31 @@ public class Level {
 	public void loadLevel(String path) {
 		String file = Utilities.loadFileAsString(path);
 		String[] tileIndex = file.split("\\s+");
-		tiles = new int[MAPWIDTH][MAPHEIGHT];
-		for (int y = 0; y < MAPHEIGHT; y++) {
-			for (int x = 0; x < MAPWIDTH; x++) {
-				tiles[x][y] = Utilities.parseInt(tileIndex[(x + y * MAPWIDTH) + 1]);
+		
+		mapwidth = Utilities.parseInt(tileIndex[0]);
+		mapheight = Utilities.parseInt(tileIndex[1]);
+		
+		tiles = new int[mapwidth][mapheight];
+		for (int y = 0; y < mapheight; y++) {
+			for (int x = 0; x < mapwidth; x++) {
+				tiles[x][y] = Utilities.parseInt(tileIndex[(x + y * mapwidth) + 2]);
 			}
 		}
+	}
+
+	public int getMapwidth() {
+		return mapwidth;
+	}
+
+	public void setMapwidth(int mapwidth) {
+		this.mapwidth = mapwidth;
+	}
+
+	public int getMapheight() {
+		return mapheight;
+	}
+
+	public void setMapheight(int mapheight) {
+		this.mapheight = mapheight;
 	}
 }

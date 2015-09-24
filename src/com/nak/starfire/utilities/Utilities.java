@@ -46,6 +46,8 @@ public class Utilities {
 
 			FileWriter fw = new FileWriter(file.getAbsoluteFile());
 			BufferedWriter bw = new BufferedWriter(fw);
+			
+			bw.write(width + " " + height + "\n");
 			for (int y = 0; y < height; y++) {
 				for (int x = 1; x < width; x++) {
 					bw.write(tile.get(x).toString() + " ");

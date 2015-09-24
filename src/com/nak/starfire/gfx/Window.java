@@ -1,5 +1,6 @@
 package com.nak.starfire.gfx;
 
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -26,6 +27,7 @@ public class Window {
 		frame.setResizable(false);
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
+		frame.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 		showOnScreen(2, frame);
 		
 		game.start();

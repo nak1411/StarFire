@@ -27,7 +27,8 @@ public class LevelState {
 	}
 
 	public void input() {
-	if(Keyboard.esc){
+		level.input();
+	if(Keyboard.b){
 		GameStateManager.gameState = GameState.MENUSTATE;
 		GameStateManager.levelState = null;
 		}

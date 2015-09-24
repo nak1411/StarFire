@@ -25,9 +25,15 @@ public class MenuState {
 	public void input() {
 		if (Keyboard.space) {
 			GameStateManager.gameState = GameState.LEVELSTATE;
+			GameStateManager.menuState = null;
 		}
 		if (Keyboard.e) {
 			GameStateManager.gameState = GameState.EDITORSTATE;
+			GameStateManager.menuState = null;
+		}
+		if (Keyboard.esc && Keyboard.toggleOn) {
+			System.exit(0);
+			Keyboard.toggleOn = false;
 		}
 	}
 }

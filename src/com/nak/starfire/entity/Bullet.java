@@ -32,10 +32,10 @@ public class Bullet extends Projectile{
 	}
 
 	public void update() {
-		if (x <= (Level.MAPWIDTH - Tile.TILEWIDTH) + (Game.WIDTH * Game.SCALE / 2) - level.dX
-			|| (x >= (Tile.TILEWIDTH * Level.MAPWIDTH - Tile.TILEWIDTH) + ((Game.WIDTH * Game.SCALE / 2) + 10) - level.dX)
-			|| (y >= (Tile.TILEHEIGHT * Level.MAPHEIGHT - Tile.TILEHEIGHT) + ((Game.HEIGHT * Game.SCALE / 2) + 8) - level.dY)
-			|| (y <= (Level.MAPHEIGHT - Tile.TILEHEIGHT) + (Game.HEIGHT * Game.SCALE / 2) - level.dY)) {
+		if (x <= (level.getMapwidth() - Tile.TILEWIDTH) + (Game.WIDTH * Game.SCALE / 2) - level.dX
+			|| (x >= (Tile.TILEWIDTH * level.getMapwidth() - Tile.TILEWIDTH) + ((Game.WIDTH * Game.SCALE / 2) + 10) - level.dX)
+			|| (y >= (Tile.TILEHEIGHT * level.getMapheight() - Tile.TILEHEIGHT) + ((Game.HEIGHT * Game.SCALE / 2) + 8) - level.dY)
+			|| (y <= (level.getMapheight() - Tile.TILEHEIGHT) + (Game.HEIGHT * Game.SCALE / 2) - level.dY)) {
 			level.remove(this);
 		}	
 		y += ny;

@@ -8,14 +8,16 @@ public class Tile {
 	protected BufferedImage image;
 	public static final int TILEWIDTH = 32, TILEHEIGHT = 32;
 	public static Tile[] tiles = new Tile[8];
-	public static int id;
+	protected final int id;
+	protected final String name;
 
 	public static Tile voidTile = new VoidTile(0);
 	public static Tile starTile = new StarTile(1);
 
-	public Tile(BufferedImage image, int id) {
+	public Tile(BufferedImage image, int id, String name) {
 		this.image = image;
-		Tile.id = id;
+		this.id = id;
+		this.name = name;
 		tiles[id] = this;
 	}
 
@@ -29,5 +31,21 @@ public class Tile {
 
 	public void render(Graphics g, int x, int y) {
 		g.drawImage(image, x, y, TILEWIDTH, TILEHEIGHT, null);
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public BufferedImage getImage() {
+		return image;
+	}
+
+	public void setImage(BufferedImage image) {
+		this.image = image;
+	}
+
+	public String getName() {
+		return name;
 	}
 }

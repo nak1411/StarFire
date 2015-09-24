@@ -23,10 +23,9 @@ public class EditorState {
 
 	public void input() {
 		editor.input();
-		if(Keyboard.esc){
+		if(Keyboard.b){
 			GameStateManager.gameState = GameState.MENUSTATE;
 			GameStateManager.editorState = null;
-			}
+		}
 	}
-
 }
