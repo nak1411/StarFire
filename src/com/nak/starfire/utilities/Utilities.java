@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class Utilities {
 	
@@ -36,7 +35,7 @@ public class Utilities {
 		}
 	}
 
-	public static void writeFile(ArrayList<Integer> tile, int width, int height, String fileName) {
+	public static void writeFile(int[] tile, int width, int height, String fileName) {
 		try {
 			File file = new File(fileName);
 
@@ -50,9 +49,9 @@ public class Utilities {
 			bw.write(width + " " + height + "\n");
 			for (int y = 0; y < height; y++) {
 				for (int x = 1; x < width; x++) {
-					bw.write(tile.get(x).toString() + " ");
+					bw.write(String.valueOf(tile[x]) + " ");
 				}
-				bw.write(tile.get(y).toString() + "\n");
+				bw.write(String.valueOf(tile[y]) + "\n");
 			}
 
 			bw.close();

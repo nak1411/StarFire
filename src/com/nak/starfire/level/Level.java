@@ -84,7 +84,7 @@ public class Level {
 	}
 	
 	public void addBullet(Bullet bullet) {
-		entities.add(bullet);
+		bullets.add(bullet);
 	}
 	
 	public void removeBullet(Bullet bullet){

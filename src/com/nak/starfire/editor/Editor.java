@@ -28,10 +28,11 @@ public class Editor {
 	private int xOff, yOff;
 	private long nextTile = 0;
 	private long tileCreateDelay;
-	private int brushX = 50, brushY = 50;
+	private int brushX = 20, brushY = 20;
 	private int currentTile, tileQueue;
 	private Font font = new Font("Courier", Font.PLAIN, 10);
-	private ArrayList<Integer> tiles = new ArrayList<Integer>();
+	private int[] tiles;
+	//private ArrayList<Integer> tiles = new ArrayList<Integer>();
 	private ArrayList<Toolbar> toolbars = new ArrayList<Toolbar>();
 	
 	
@@ -59,15 +60,16 @@ public class Editor {
 		
 		for (int y = 0; y < mapheight; y++) {
 			for (int x = 0; x < mapwidth; x++) {
-				g.drawImage(Tile.tiles[currentTile].getImage(), ((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), null);
-
-				//g.drawLine((x * Tile.TILEWIDTH - xOff) + Tile.TILEWIDTH, (y * Tile.TILEHEIGHT - yOff) + Tile.TILEHEIGHT, 200, 200); cool 3d effect
-				g2d.setColor(Color.decode("888877"));
-				if(getMouseBounds(brushX, brushY).intersects(getTileBounds(((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), Tile.TILEWIDTH, Tile.TILEHEIGHT))){
-				g.drawImage(Tile.tiles[currentTile].getImage(), ((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), null);
-				}
+				//Draw grid lines
 				g2d.draw(getTileBounds(((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), Tile.TILEWIDTH, Tile.TILEHEIGHT));
 				
+
+				if(getMouseBounds(brushX, brushY).intersects(getTileBounds(((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), Tile.TILEWIDTH, Tile.TILEHEIGHT))){
+					g.drawImage(Tile.tiles[currentTile].getImage(), ((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), null);
+				}
+				
+				
+				//Draw tile highlights
 				if(getMouseBounds(brushX, brushY).intersects(getTileBounds(((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), Tile.TILEWIDTH, Tile.TILEHEIGHT))){
 					g2d.setColor(Color.YELLOW);
 					g2d.draw(getTileHighlight(((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), Tile.TILEWIDTH, Tile.TILEHEIGHT));
@@ -80,7 +82,7 @@ public class Editor {
 			toolbars.get(i).render(g);
 		}
 		
-		//UI stuff
+		/*UI stuff*************************************************************************************************************/
 		g.setColor(Color.WHITE);
 		g.setFont(font);
 		g.drawString("LOC X: " + String.valueOf(Mouse.mouseVec.getX() - (Game.HEIGHT * Game.SCALE) / 2 + scrollX), 5, 10);
@@ -154,7 +156,7 @@ public class Editor {
 		if(Keyboard.space && Keyboard.toggleOn){
 			for (int y = 0; y < mapheight; y++) {
 				for (int x = 0; x < mapwidth; x++) {
-					tiles.add(x + y * mapwidth, Tile.tiles[currentTile].getId());
+					tiles[(x + y * mapwidth)] = Tile.tiles[currentTile].getId();
 				}
 			}
 			Utilities.writeFile(tiles, mapwidth, mapheight, "res/level1.txt");
@@ -171,6 +173,21 @@ public class Editor {
 		
 		if (Keyboard.two) {
 			tileQueue = Tile.tiles[1].getId();
+		}
+	}
+	
+	public void loadLevel(String path) {
+		String file = Utilities.loadFileAsString(path);
+		String[] tileIndex = file.split("\\s+");
+		
+		mapwidth = Utilities.parseInt(tileIndex[0]);
+		mapheight = Utilities.parseInt(tileIndex[1]);
+		
+		tiles = new int[mapwidth * mapheight];
+		for (int y = 0; y < mapheight; y++) {
+			for (int x = 0; x < mapwidth; x++) {
+				tiles[x + y * mapwidth] = Utilities.parseInt(tileIndex[(x + y * mapwidth) + 2]);
+			}
 		}
 	}
 	
