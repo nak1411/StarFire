@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.nak.starfire.Game;
 import com.nak.starfire.gfx.SpriteSheet;
@@ -20,6 +21,8 @@ import com.nak.starfire.utilities.Time;
 import com.nak.starfire.utilities.Utilities;
 
 public class Editor {
+
+	private Random rand = new Random();
 	public static BufferedImage image = SpriteSheet.voidTile;
 	private int mapwidth = 10, mapheight = 10;
 	private int scrollX, scrollY;
@@ -32,57 +35,91 @@ public class Editor {
 	private int currentTile, tileQueue;
 	private Font font = new Font("Courier", Font.PLAIN, 10);
 	private int[] tiles;
-	//private ArrayList<Integer> tiles = new ArrayList<Integer>();
+	private int[] test;
 	private ArrayList<Toolbar> toolbars = new ArrayList<Toolbar>();
-	
-	
+
 	public Editor() {
-		
 		addToolbar(new LeftBar(0, 0, 100, (Game.HEIGHT * Game.SCALE), new Color(0.5f, 0.5f, 1.0f, 0.4f)));
 		addToolbar(new TopBar(100, 0, (Game.WIDTH * Game.SCALE) - 100, 40, new Color(1.0f, 0.5f, 0.5f, 0.4f)));
+		tiles = new int[mapwidth * mapheight];
+		test = new int[mapwidth * mapheight];
+		//Test
+		for (int y = 0; y < mapheight; y++) {
+			System.out.print("\n");
+			System.out.print(" ");
+			for (int x = 0; x < mapwidth; x++) {
+				System.out.print(test[x] = rand.nextInt(9));
+				System.out.print(" ");
+			}
+			System.out.print(test[y] = rand.nextInt(9));
+		}
 	}
 
 	public void update() {
-		
+
 		tileCreateDelay = Time.SECOND - (100000000 * tileCreateRate);
-		
+
 		xOff = scrollX - (Game.WIDTH * Game.SCALE) / 2;
 		yOff = scrollY - (Game.HEIGHT * Game.SCALE) / 2;
-		
+
 		for (int i = 0; i < toolbars.size(); i++) {
 			toolbars.get(i).update();
 		}
+		loadLevel("res/level1.txt");
 	}
 
 	public void render(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setColor(Color.decode("888877"));
-		
+
 		for (int y = 0; y < mapheight; y++) {
 			for (int x = 0; x < mapwidth; x++) {
-				//Draw grid lines
-				g2d.draw(getTileBounds(((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), Tile.TILEWIDTH, Tile.TILEHEIGHT));
-				
+				if (Mouse.left) {
+					Utilities.writeFile(tiles, mapwidth, mapheight, "res/level1.txt");
+					if (getMouseBounds(brushX, brushY).intersects(getTileBounds(((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), Tile.TILEWIDTH, Tile.TILEHEIGHT))) {
+						g.drawImage(Tile.tiles[currentTile].getImage(), ((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), null);
+						tiles[x + y * mapwidth] = currentTile;
 
-				if(getMouseBounds(brushX, brushY).intersects(getTileBounds(((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), Tile.TILEWIDTH, Tile.TILEHEIGHT))){
-					g.drawImage(Tile.tiles[currentTile].getImage(), ((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), null);
+					}
 				}
-				
-				
-				//Draw tile highlights
-				if(getMouseBounds(brushX, brushY).intersects(getTileBounds(((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), Tile.TILEWIDTH, Tile.TILEHEIGHT))){
+			}
+		}
+
+		for (int y = 0; y < mapheight; y++) {
+			for (int x = 0; x < mapwidth; x++) {
+
+				// Draw grid lines
+				g2d.draw(getTileBounds(((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), Tile.TILEWIDTH, Tile.TILEHEIGHT));
+
+				// Draw tile
+				// if (getMouseBounds(brushX,
+				// brushY).intersects(getTileBounds(((x * Tile.TILEWIDTH) -
+				// xOff), ((y * Tile.TILEHEIGHT) - yOff), Tile.TILEWIDTH,
+				// Tile.TILEHEIGHT))) {
+				// g.drawImage(Tile.tiles[currentTile].getImage(), ((x *
+				// Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff),
+				// null);
+				// }
+
+				// Draw tile highlights
+				if (getMouseBounds(brushX, brushY).intersects(getTileBounds(((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), Tile.TILEWIDTH, Tile.TILEHEIGHT))) {
 					g2d.setColor(Color.YELLOW);
 					g2d.draw(getTileHighlight(((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), Tile.TILEWIDTH, Tile.TILEHEIGHT));
+					System.out.println(String.valueOf(tiles[x + y * mapwidth]));
 					g2d.setColor(Color.decode("888877"));
 				}
 			}
 		}
-		
+
 		for (int i = 0; i < toolbars.size(); i++) {
 			toolbars.get(i).render(g);
 		}
-		
-		/*UI stuff*************************************************************************************************************/
+
+		/*
+		 * UI
+		 * stuff**************************************************************
+		 * **********************************************
+		 */
 		g.setColor(Color.WHITE);
 		g.setFont(font);
 		g.drawString("LOC X: " + String.valueOf(Mouse.mouseVec.getX() - (Game.HEIGHT * Game.SCALE) / 2 + scrollX), 5, 10);
@@ -94,7 +131,8 @@ public class Editor {
 		g.setColor(Color.LIGHT_GRAY);
 		g.drawLine(0, Mouse.mouseVec.getY(), (Game.WIDTH * Game.SCALE) + 27, Mouse.mouseVec.getY());
 		g.drawLine(Mouse.mouseVec.getX(), 0, Mouse.mouseVec.getX(), (Game.HEIGHT * Game.SCALE));
-		//g.drawString("Tile Selected: " + Tile.tiles[tileQueue].getName(), 100, 13);
+		// g.drawString("Tile Selected: " + Tile.tiles[tileQueue].getName(),
+		// 100, 13);
 		g.drawString("SHORTCUTS:", 100, 13);
 		g.drawString("(b) = Main Menu", 165, 13);
 		g.drawString("(]) = Increase Brush Size", 265, 13);
@@ -109,14 +147,14 @@ public class Editor {
 	public void input() {
 		if (Time.getTime() > nextTile) {
 			nextTile = Time.getTime() + tileCreateDelay;
-			
-			if(Keyboard.increase && tileCreateRate <= 9){
+
+			if (Keyboard.increase && tileCreateRate <= 9) {
 				tileCreateRate++;
 			}
-			if(Keyboard.decrease && tileCreateRate >= 1){
+			if (Keyboard.decrease && tileCreateRate >= 1) {
 				tileCreateRate--;
 			}
-			
+
 			if (Keyboard.numuptoggle && mapheight >= 2) {
 				mapheight -= 1;
 			}
@@ -130,7 +168,7 @@ public class Editor {
 				mapwidth -= 1;
 			}
 		}
-		
+
 		if (Keyboard.up) {
 			scrollY -= scrollSpeed;
 		}
@@ -143,7 +181,7 @@ public class Editor {
 		if (Keyboard.right) {
 			scrollX += scrollSpeed;
 		}
-		
+
 		if (Keyboard.brushInc && brushX <= 798 && brushY <= 798) {
 			brushX += 3;
 			brushY += 3;
@@ -152,60 +190,53 @@ public class Editor {
 			brushX -= 3;
 			brushY -= 3;
 		}
-		
-		if(Keyboard.space && Keyboard.toggleOn){
-			for (int y = 0; y < mapheight; y++) {
-				for (int x = 0; x < mapwidth; x++) {
-					tiles[(x + y * mapwidth)] = Tile.tiles[currentTile].getId();
-				}
-			}
+
+		if (Keyboard.space && Keyboard.toggleOn) {
+
 			Utilities.writeFile(tiles, mapwidth, mapheight, "res/level1.txt");
 			Keyboard.toggleOn = false;
 		}
-		
-		if(Mouse.left){
-			currentTile = tileQueue;
-		}
-		
+
 		if (Keyboard.one) {
-			tileQueue = Tile.tiles[0].getId();
+			currentTile = Tile.tiles[0].getId();
 		}
-		
+
 		if (Keyboard.two) {
-			tileQueue = Tile.tiles[1].getId();
+			currentTile = Tile.tiles[1].getId();
 		}
 	}
-	
+
 	public void loadLevel(String path) {
 		String file = Utilities.loadFileAsString(path);
 		String[] tileIndex = file.split("\\s+");
-		
+
 		mapwidth = Utilities.parseInt(tileIndex[0]);
 		mapheight = Utilities.parseInt(tileIndex[1]);
-		
-		tiles = new int[mapwidth * mapheight];
+
 		for (int y = 0; y < mapheight; y++) {
 			for (int x = 0; x < mapwidth; x++) {
 				tiles[x + y * mapwidth] = Utilities.parseInt(tileIndex[(x + y * mapwidth) + 2]);
 			}
 		}
 	}
-	
-	public void addToolbar(Toolbar toolbar){
+
+	public void addToolbar(Toolbar toolbar) {
 		toolbars.add(toolbar);
 	}
-	
-	public void removeToolbar(Toolbar toolbar){
+
+	public void removeToolbar(Toolbar toolbar) {
 		toolbars.remove(toolbar);
 	}
-	
-	private Rectangle getTileBounds(int x, int y, int width, int height){
+
+	private Rectangle getTileBounds(int x, int y, int width, int height) {
 		return new Rectangle(x, y, width, height);
 	}
-	private Rectangle getTileHighlight(int x, int y, int width, int height){
+
+	private Rectangle getTileHighlight(int x, int y, int width, int height) {
 		return new Rectangle(x, y, width - 1, height - 1);
 	}
-	private Rectangle getMouseBounds(int width, int height){
+
+	private Rectangle getMouseBounds(int width, int height) {
 		return new Rectangle((Mouse.mouseVec.getX() - width / 2), (Mouse.mouseVec.getY() - height / 2), width, height);
 	}
 }
