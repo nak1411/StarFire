@@ -7,7 +7,7 @@ public class SpriteSheet {
 	private static int WIDTH, HEIGHT;
 
 	public static BufferedImage spritesheet, tilesheet;
-	public static BufferedImage starTile, voidTile;
+	public static BufferedImage starClusterOne, starClusterTwo, starClusterThree, voidTile;
 	public static BufferedImage playerup, playerdown, playerleft, playerright;
 	public static BufferedImage playerupperleft, playerupperright, playerlowerleft, playerlowerright;
 	public static BufferedImage bulletup, bulletdown, bulletleft, bulletright;
@@ -24,7 +24,9 @@ public class SpriteSheet {
 		spritesheet = ImageLoader.loadImage("/spritesheet.png");
 
 		// TILE SPRITES
-		starTile = tilesheet.getSubimage(WIDTH, 0, WIDTH, HEIGHT);
+		starClusterOne = tilesheet.getSubimage(WIDTH, 0, WIDTH, HEIGHT);
+		starClusterTwo = tilesheet.getSubimage(WIDTH * 2, 0, WIDTH, HEIGHT);
+		starClusterThree = tilesheet.getSubimage(WIDTH * 3, 0, WIDTH, HEIGHT);
 		voidTile = tilesheet.getSubimage(0, 0, WIDTH, HEIGHT);
 
 		// ENTITY SPRITES

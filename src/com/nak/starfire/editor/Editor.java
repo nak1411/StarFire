@@ -24,7 +24,7 @@ public class Editor {
 
 	private Random rand = new Random();
 	public static BufferedImage image = SpriteSheet.voidTile;
-	private int mapwidth = 10, mapheight = 10;
+	private int mapwidth = 128, mapheight = 128;
 	private int scrollX, scrollY;
 	private final int scrollSpeed = 2;
 	private int tileCreateRate = 8;
@@ -32,27 +32,16 @@ public class Editor {
 	private long nextTile = 0;
 	private long tileCreateDelay;
 	private int brushX = 20, brushY = 20;
-	private int currentTile, tileQueue;
+	private int currentTile;
 	private Font font = new Font("Courier", Font.PLAIN, 10);
-	private int[] tiles;
-	private int[] test;
+	private int[][] tileCache;
 	private ArrayList<Toolbar> toolbars = new ArrayList<Toolbar>();
 
 	public Editor() {
 		addToolbar(new LeftBar(0, 0, 100, (Game.HEIGHT * Game.SCALE), new Color(0.5f, 0.5f, 1.0f, 0.4f)));
 		addToolbar(new TopBar(100, 0, (Game.WIDTH * Game.SCALE) - 100, 40, new Color(1.0f, 0.5f, 0.5f, 0.4f)));
-		tiles = new int[mapwidth * mapheight];
-		test = new int[mapwidth * mapheight];
-		//Test
-		for (int y = 0; y < mapheight; y++) {
-			System.out.print("\n");
-			System.out.print(" ");
-			for (int x = 0; x < mapwidth; x++) {
-				System.out.print(test[x] = rand.nextInt(9));
-				System.out.print(" ");
-			}
-			System.out.print(test[y] = rand.nextInt(9));
-		}
+		tileCache = new int[mapwidth][mapheight];
+		loadLevel("res/levelcache.txt");
 	}
 
 	public void update() {
@@ -65,7 +54,11 @@ public class Editor {
 		for (int i = 0; i < toolbars.size(); i++) {
 			toolbars.get(i).update();
 		}
-		loadLevel("res/level1.txt");
+
+		if (Keyboard.space && Keyboard.toggleOn) {
+			randomLevel();
+			Keyboard.toggleOn = false;
+		}
 	}
 
 	public void render(Graphics g) {
@@ -74,38 +67,23 @@ public class Editor {
 
 		for (int y = 0; y < mapheight; y++) {
 			for (int x = 0; x < mapwidth; x++) {
-				if (Mouse.left) {
-					Utilities.writeFile(tiles, mapwidth, mapheight, "res/level1.txt");
-					if (getMouseBounds(brushX, brushY).intersects(getTileBounds(((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), Tile.TILEWIDTH, Tile.TILEHEIGHT))) {
-						g.drawImage(Tile.tiles[currentTile].getImage(), ((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), null);
-						tiles[x + y * mapwidth] = currentTile;
-
-					}
-				}
-			}
-		}
-
-		for (int y = 0; y < mapheight; y++) {
-			for (int x = 0; x < mapwidth; x++) {
-
+				getTile(x, y).render(g, (x * Tile.TILEWIDTH) - xOff, (y * Tile.TILEHEIGHT) - yOff);
 				// Draw grid lines
 				g2d.draw(getTileBounds(((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), Tile.TILEWIDTH, Tile.TILEHEIGHT));
 
 				// Draw tile
-				// if (getMouseBounds(brushX,
-				// brushY).intersects(getTileBounds(((x * Tile.TILEWIDTH) -
-				// xOff), ((y * Tile.TILEHEIGHT) - yOff), Tile.TILEWIDTH,
-				// Tile.TILEHEIGHT))) {
-				// g.drawImage(Tile.tiles[currentTile].getImage(), ((x *
-				// Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff),
-				// null);
-				// }
+				if (getMouseBounds(brushX, brushY).intersects(getTileBounds(((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), Tile.TILEWIDTH, Tile.TILEHEIGHT))) {
+					g.drawImage(Tile.tiles[currentTile].getImage(), ((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), null);
+					if (Mouse.left) {
+						addTile(x, y);
+						Utilities.writeFile(tileCache, mapwidth, mapheight, "res/levelcache.txt");
+					}
+				}
 
 				// Draw tile highlights
 				if (getMouseBounds(brushX, brushY).intersects(getTileBounds(((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), Tile.TILEWIDTH, Tile.TILEHEIGHT))) {
 					g2d.setColor(Color.YELLOW);
 					g2d.draw(getTileHighlight(((x * Tile.TILEWIDTH) - xOff), ((y * Tile.TILEHEIGHT) - yOff), Tile.TILEWIDTH, Tile.TILEHEIGHT));
-					System.out.println(String.valueOf(tiles[x + y * mapwidth]));
 					g2d.setColor(Color.decode("888877"));
 				}
 			}
@@ -138,7 +116,7 @@ public class Editor {
 		g.drawString("(]) = Increase Brush Size", 265, 13);
 		g.drawString("([) = Decrease Brush Size", 425, 13);
 		g.drawString("(0-9) = Cycle Tiles", 585, 13);
-		g.drawString("(space) = Save Map", 710, 13);
+		g.drawString("(SPACE) = Randomize", 710, 13);
 		g.drawString("(NUMPAD 2,4,8,6) = Change Map Size", 165, 30);
 		g.drawString("(WASD) = Pan View", 380, 30);
 		g2d.draw(getMouseBounds(brushX, brushY));
@@ -192,8 +170,6 @@ public class Editor {
 		}
 
 		if (Keyboard.space && Keyboard.toggleOn) {
-
-			Utilities.writeFile(tiles, mapwidth, mapheight, "res/level1.txt");
 			Keyboard.toggleOn = false;
 		}
 
@@ -204,6 +180,12 @@ public class Editor {
 		if (Keyboard.two) {
 			currentTile = Tile.tiles[1].getId();
 		}
+		if (Keyboard.three) {
+			currentTile = Tile.tiles[2].getId();
+		}
+		if (Keyboard.four) {
+			currentTile = Tile.tiles[3].getId();
+		}
 	}
 
 	public void loadLevel(String path) {
@@ -212,12 +194,48 @@ public class Editor {
 
 		mapwidth = Utilities.parseInt(tileIndex[0]);
 		mapheight = Utilities.parseInt(tileIndex[1]);
-
 		for (int y = 0; y < mapheight; y++) {
 			for (int x = 0; x < mapwidth; x++) {
-				tiles[x + y * mapwidth] = Utilities.parseInt(tileIndex[(x + y * mapwidth) + 2]);
+				tileCache[x][y] = Utilities.parseInt(tileIndex[(x + y * mapwidth) + 2]);
 			}
 		}
+		Utilities.writeFile(tileCache, mapwidth, mapheight, "res/levelcache.txt");
+	}
+
+	public void randomLevel() {
+		for (int y = 0; y < mapheight; y++) {
+			for (int x = 0; x < mapwidth; x++) {
+				addRandTile(rand.nextInt(mapwidth), rand.nextInt(mapheight));
+
+			}
+		}
+		Utilities.writeFile(tileCache, mapwidth, mapheight, "res/levelcache.txt");
+		loadLevel("res/levelcache.txt");
+
+	}
+
+	public void addTile(int xIndex, int yIndex) {
+		for (int y = 0; y < mapheight; y++) {
+			for (int x = 0; x < mapwidth; x++) {
+				tileCache[xIndex][yIndex] = currentTile;
+			}
+		}
+	}
+
+	public void addRandTile(int xIndex, int yIndex) {
+		for (int y = 0; y < mapheight; y++) {
+			for (int x = 0; x < mapwidth; x++) {
+				tileCache[xIndex][yIndex] = rand.nextInt(4);
+			}
+		}
+	}
+
+	public Tile getTile(int x, int y) {
+		Tile tile = Tile.tiles[tileCache[x][y]];
+		if (tile == null) {
+			return Tile.voidTile;
+		}
+		return tile;
 	}
 
 	public void addToolbar(Toolbar toolbar) {

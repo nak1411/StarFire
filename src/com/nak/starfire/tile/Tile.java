@@ -12,7 +12,9 @@ public class Tile {
 	protected final String name;
 
 	public static Tile voidTile = new VoidTile(0);
-	public static Tile starTile = new StarTile(1);
+	public static Tile starClusterOne = new StarClusterOne(1);
+	public static Tile starClusterTwo = new StarClusterTwo(2);
+	public static Tile starClusterThree = new StarClusterThree(3);
 
 	public Tile(BufferedImage image, int id, String name) {
 		this.image = image;

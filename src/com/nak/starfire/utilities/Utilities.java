@@ -8,7 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Utilities {
-	
 
 	public static String loadFileAsString(String path) {
 
@@ -35,7 +34,7 @@ public class Utilities {
 		}
 	}
 
-	public static void writeFile(int[] tile, int width, int height, String fileName) {
+	public static void writeFile(int[][] tile, int width, int height, String fileName) {
 		try {
 			File file = new File(fileName);
 
@@ -45,18 +44,16 @@ public class Utilities {
 
 			FileWriter fw = new FileWriter(file.getAbsoluteFile());
 			BufferedWriter bw = new BufferedWriter(fw);
-			
+
 			bw.write(width + " " + height + "\n");
 			for (int y = 0; y < height; y++) {
-				for (int x = 1; x < width; x++) {
-					bw.write(String.valueOf(tile[x]) + " ");
+				for (int x = 0; x < width; x++) {
+					bw.write(String.valueOf(tile[x][y]) + " ");
 				}
-				bw.write(String.valueOf(tile[y]) + "\n");
+				bw.write("\n");
 			}
 
 			bw.close();
-
-			System.out.println("Done");
 
 		} catch (IOException e) {
 			e.printStackTrace();

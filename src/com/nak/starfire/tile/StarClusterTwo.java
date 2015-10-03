@@ -2,10 +2,10 @@ package com.nak.starfire.tile;
 
 import com.nak.starfire.gfx.SpriteSheet;
 
-public class StarTile extends Tile {
+public class StarClusterTwo extends Tile {
 	
-	public StarTile(int id) {
-		super(SpriteSheet.starTile, id, "Star Tile");
+	public StarClusterTwo(int id) {
+		super(SpriteSheet.starClusterTwo, id, "Star Cluster 2");
 	}
 
 	@Override
