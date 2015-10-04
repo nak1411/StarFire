@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.nak.starfire.Game;
-import com.nak.starfire.entity.Asteroid;
 import com.nak.starfire.entity.Bullet;
 import com.nak.starfire.entity.Entity;
 import com.nak.starfire.entity.Projectile;
-import com.nak.starfire.gfx.SpriteSheet;
 import com.nak.starfire.input.Keyboard;
 import com.nak.starfire.tile.Tile;
 import com.nak.starfire.utilities.Utilities;
@@ -34,10 +32,13 @@ public class Level {
 		for (int i = 0; i < entities.size(); i++) {
 			entities.get(i).update();
 		}
-		
+		for (int i = 0; i < bullets.size(); i++) {
+			bullets.get(i).update();
+		}
+
 		xOff = ((Game.WIDTH * Game.SCALE) / 2) - dX;
 		yOff = ((Game.HEIGHT * Game.SCALE) / 2) - dY;
-		
+
 	}
 
 	public void render(Graphics g) {
@@ -50,9 +51,12 @@ public class Level {
 		for (int i = 0; i < entities.size(); i++) {
 			entities.get(i).render(g);
 		}
+		for (int i = 0; i < bullets.size(); i++) {
+			bullets.get(i).render(g);
+		}
 	}
-	
-	public void input(){
+
+	public void input() {
 		if (dX >= 7) {
 			if (Keyboard.left) {
 				dX -= shipVelX;
@@ -76,25 +80,21 @@ public class Level {
 				dY += shipVelY;
 			}
 		}
-		if (Keyboard.enter && Keyboard.toggleOn) {
-			add(new Asteroid(this, SpriteSheet.asteroidOne, 100 + (xOff + dX), 100 + (yOff + dY)));
-			Keyboard.toggleOn = false;
-		}
 	}
 
 	public void add(Entity entity) {
 		entities.add(entity);
 	}
-	
+
 	public void remove(Entity entity) {
 		entities.remove(entity);
 	}
-	
+
 	public void addBullet(Bullet bullet) {
 		bullets.add(bullet);
 	}
-	
-	public void removeBullet(Bullet bullet){
+
+	public void removeBullet(Bullet bullet) {
 		bullets.remove(bullet);
 	}
 
@@ -109,10 +109,10 @@ public class Level {
 	public void loadLevel(String path) {
 		String file = Utilities.loadFileAsString(path);
 		String[] tileIndex = file.split("\\s+");
-		
+
 		mapwidth = Utilities.parseInt(tileIndex[0]);
 		mapheight = Utilities.parseInt(tileIndex[1]);
-		
+
 		tiles = new int[mapwidth][mapheight];
 		for (int y = 0; y < mapheight; y++) {
 			for (int x = 0; x < mapwidth; x++) {

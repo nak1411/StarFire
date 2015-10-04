@@ -35,7 +35,7 @@ public class Bullet extends Projectile{
 			|| (x - level.dX >= (Tile.TILEWIDTH * level.getMapwidth() - Tile.TILEWIDTH) + ((Game.WIDTH * Game.SCALE / 2) + 10) - level.dX)
 			|| (y - level.dY >= (Tile.TILEHEIGHT * level.getMapheight() - Tile.TILEHEIGHT) + ((Game.HEIGHT * Game.SCALE / 2) + 8) - level.dY)
 			|| (y - level.dY <= (level.getMapheight() - Tile.TILEHEIGHT) + (Game.HEIGHT * Game.SCALE / 2) - level.dY)) {
-			level.remove(this);
+			level.removeBullet(this);
 		}	
 		y += ny;
 		x += nx;
