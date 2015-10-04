@@ -11,7 +11,8 @@ public class SpriteSheet {
 	public static BufferedImage playerup, playerdown, playerleft, playerright;
 	public static BufferedImage playerupperleft, playerupperright, playerlowerleft, playerlowerright;
 	public static BufferedImage bulletup, bulletdown, bulletleft, bulletright;
-	public static BufferedImage bullletupperleft, bulletupperright, bulletlowerleft, bulletlowerright;
+	public static BufferedImage bulletupperleft, bulletupperright, bulletlowerleft, bulletlowerright;
+	public static BufferedImage asteroidOne;
 
 	public SpriteSheet(int width, int height) {
 		SpriteSheet.WIDTH = width;
@@ -28,6 +29,7 @@ public class SpriteSheet {
 		starClusterTwo = tilesheet.getSubimage(WIDTH * 2, 0, WIDTH, HEIGHT);
 		starClusterThree = tilesheet.getSubimage(WIDTH * 3, 0, WIDTH, HEIGHT);
 		voidTile = tilesheet.getSubimage(0, 0, WIDTH, HEIGHT);
+		asteroidOne = tilesheet.getSubimage(0, HEIGHT, WIDTH, HEIGHT);
 
 		// ENTITY SPRITES
 		playerup = spritesheet.getSubimage(0, 0, WIDTH, HEIGHT);

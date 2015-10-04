@@ -21,7 +21,6 @@ public class Bullet extends Projectile{
 		ny = velocity * Math.sin(angle);
 		this.x = x + (Game.WIDTH * Game.SCALE) / 2;
 		this.y = y + (Game.HEIGHT * Game.SCALE) / 2;
-		level.add(this);
 	}
 
 	public void render(Graphics g) {

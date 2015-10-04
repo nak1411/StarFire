@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.nak.starfire.Game;
+import com.nak.starfire.entity.Asteroid;
 import com.nak.starfire.entity.Bullet;
 import com.nak.starfire.entity.Entity;
 import com.nak.starfire.entity.Projectile;
+import com.nak.starfire.gfx.SpriteSheet;
 import com.nak.starfire.input.Keyboard;
 import com.nak.starfire.tile.Tile;
 import com.nak.starfire.utilities.Utilities;
@@ -35,6 +37,7 @@ public class Level {
 		
 		xOff = ((Game.WIDTH * Game.SCALE) / 2) - dX;
 		yOff = ((Game.HEIGHT * Game.SCALE) / 2) - dY;
+		
 	}
 
 	public void render(Graphics g) {
@@ -72,6 +75,10 @@ public class Level {
 			if (Keyboard.down) {
 				dY += shipVelY;
 			}
+		}
+		if (Keyboard.enter && Keyboard.toggleOn) {
+			add(new Asteroid(this, SpriteSheet.asteroidOne, 100 + (xOff + dX), 100 + (yOff + dY)));
+			Keyboard.toggleOn = false;
 		}
 	}
 
