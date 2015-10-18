@@ -19,8 +19,8 @@ public class Game extends Canvas implements Runnable {
 	private GameStateManager gsm;
 	private Assets assets;
 
-	public static final int HEIGHT = 300;
-	public static final int WIDTH = 300;
+	public static final int HEIGHT = 130;
+	public static final int WIDTH = 130;
 	public static final String TITLE = "StarFire";
 	public static final int SCALE = 3;
 	private boolean running = false;

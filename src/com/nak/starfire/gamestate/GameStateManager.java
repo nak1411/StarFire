@@ -20,7 +20,7 @@ public class GameStateManager {
 			break;
 		case LEVELSTATE:
 			if (levelState == null) {
-				levelState = new LevelState("res/level1.txt");
+				levelState = new LevelState("res/levelcache.txt");
 			}
 			levelState.update();
 			levelState.input();
@@ -46,7 +46,7 @@ public class GameStateManager {
 			break;
 		case LEVELSTATE:
 			if (levelState == null) {
-				levelState = new LevelState("res/level1.txt");
+				levelState = new LevelState("res/levelcache.txt");
 			}
 			levelState.render(g);
 			break;
