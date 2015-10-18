@@ -3,9 +3,12 @@ package com.nak.starfire.tile;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import com.nak.starfire.level.Level;
+
 public class Tile {
 
 	protected BufferedImage image;
+	protected Level level;
 	public static final int TILEWIDTH = 32, TILEHEIGHT = 32;
 	public static Tile[] tiles = new Tile[8];
 	protected final int id;
@@ -33,6 +36,7 @@ public class Tile {
 
 	public void render(Graphics g, int x, int y) {
 		g.drawImage(image, x, y, TILEWIDTH, TILEHEIGHT, null);
+
 	}
 
 	public int getId() {
@@ -49,5 +53,5 @@ public class Tile {
 
 	public String getName() {
 		return name;
-	}
+	}	
 }
