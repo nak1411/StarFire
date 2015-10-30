@@ -18,6 +18,7 @@ public class Tile {
 	public static Tile starClusterOne = new StarClusterOne(1);
 	public static Tile starClusterTwo = new StarClusterTwo(2);
 	public static Tile starClusterThree = new StarClusterThree(3);
+	public static Tile wall = new Wall(4);
 
 	public Tile(BufferedImage image, int id, String name) {
 		this.image = image;
@@ -30,7 +31,7 @@ public class Tile {
 
 	}
 
-	protected boolean isSolid() {
+	public boolean isSolid() {
 		return false;
 	}
 
@@ -47,11 +48,7 @@ public class Tile {
 		return image;
 	}
 
-	public void setImage(BufferedImage image) {
-		this.image = image;
-	}
-
 	public String getName() {
 		return name;
-	}	
+	}
 }

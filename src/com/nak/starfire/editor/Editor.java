@@ -172,6 +172,9 @@ public class Editor {
 		if (Keyboard.four) {
 			currentTile = Tile.tiles[3].getId();
 		}
+		if (Keyboard.five) {
+			currentTile = Tile.tiles[4].getId();
+		}
 		if (Keyboard.space && Keyboard.toggleOn) {
 			randomLevel();
 			Keyboard.toggleOn = false;
@@ -232,7 +235,7 @@ public class Editor {
 	public void addRandTile(int xIndex, int yIndex) {
 		for (int y = 0; y < mapheight; y++) {
 			for (int x = 0; x < mapwidth; x++) {
-				tileCache[xIndex][yIndex] = rand.nextInt(4);
+				tileCache[xIndex][yIndex] = rand.nextInt(5);
 			}
 		}
 	}

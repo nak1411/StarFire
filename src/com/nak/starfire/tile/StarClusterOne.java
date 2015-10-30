@@ -9,7 +9,7 @@ public class StarClusterOne extends Tile {
 	}
 
 	@Override
-	protected boolean isSolid() {
+	public boolean isSolid() {
 		return false;
 	}
 }

@@ -9,7 +9,7 @@ public class VoidTile extends Tile {
 	}
 
 	@Override
-	protected boolean isSolid() {
+	public boolean isSolid() {
 		return false;
 	}
 	

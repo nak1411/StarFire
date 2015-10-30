@@ -32,14 +32,14 @@ public class Player extends Mob {
 		g.setColor(Color.WHITE);
 		g.setFont(font);
 		g.drawString("ROF: " + String.valueOf(rateOfFire), 10, 35);
-		
-		Graphics2D g2d = (Graphics2D) g;
-		g2d.setColor(Color.GREEN);
-		g2d.draw(getTopBounds());
-		g2d.draw(getBotBounds());
-		g2d.draw(getLeftBounds());
-		g2d.draw(getRightBounds());
-		g2d.draw(getCenterBounds());
+//		
+//		Graphics2D g2d = (Graphics2D) g;
+//		g2d.setColor(Color.GREEN);
+//		g2d.draw(getTopBounds());
+//		g2d.draw(getBotBounds());
+//		g2d.draw(getLeftBounds());
+//		g2d.draw(getRightBounds());
+//		g2d.draw(getCenterBounds());
 //		g.setColor(Color.RED);
 //		g.drawLine(0, 0, (Game.WIDTH * Game.SCALE) + 27, Game.HEIGHT * Game.SCALE);
 //		g.drawLine((Game.WIDTH * Game.SCALE) - 7, 0, 0, (Game.HEIGHT * Game.SCALE) - 30);
@@ -90,16 +90,16 @@ public class Player extends Mob {
 	}
 	
 	public Rectangle getTopBounds(){
-		return new Rectangle(((Game.WIDTH * Game.SCALE) / 2), (Game.HEIGHT * Game.SCALE) / 2 , 18, 1);
+		return new Rectangle(((Game.WIDTH * Game.SCALE) / 2) + 8, (Game.HEIGHT * Game.SCALE) / 2 , 1, 1);
 	}
 	public Rectangle getBotBounds(){
-		return new Rectangle(((Game.WIDTH * Game.SCALE) / 2), ((Game.HEIGHT * Game.SCALE) / 2) + 30 , 18, 1);
+		return new Rectangle(((Game.WIDTH * Game.SCALE) / 2) + 8, ((Game.HEIGHT * Game.SCALE) / 2) + 30 , 1, 1);
 	}
 	public Rectangle getLeftBounds(){
-		return new Rectangle(((Game.WIDTH * Game.SCALE) / 2) - 4, ((Game.HEIGHT * Game.SCALE) / 2) + 3 , 1, 24);
+		return new Rectangle(((Game.WIDTH * Game.SCALE) / 2) - 4, ((Game.HEIGHT * Game.SCALE) / 2) + 12 , 1, 1);
 	}
 	public Rectangle getRightBounds(){
-		return new Rectangle(((Game.WIDTH * Game.SCALE) / 2) + 21, ((Game.HEIGHT * Game.SCALE) / 2) + 3 , 1, 24);
+		return new Rectangle(((Game.WIDTH * Game.SCALE) / 2) + 21, ((Game.HEIGHT * Game.SCALE) / 2) + 12 , 1, 1);
 	}
 	public Rectangle getCenterBounds(){
 		return new Rectangle(((Game.WIDTH * Game.SCALE) / 2) + 8, ((Game.HEIGHT * Game.SCALE) / 2) + 14, 1, 1);
