@@ -34,6 +34,24 @@ public abstract class Entity {
 		this.level = level;
 	}
 	
+	
+	
+	public double getX() {
+		return x;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+
 	public Rectangle getTopBounds(){
 		return new Rectangle(xBound, yBound, 32, 32);
 	}

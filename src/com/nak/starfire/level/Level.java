@@ -11,13 +11,12 @@ import java.util.Random;
 import com.nak.starfire.Game;
 import com.nak.starfire.entity.Asteroid;
 import com.nak.starfire.entity.Bullet;
+import com.nak.starfire.entity.Enemy;
 import com.nak.starfire.entity.Entity;
 import com.nak.starfire.entity.Player;
-import com.nak.starfire.gfx.SpriteSheet;
 import com.nak.starfire.input.Keyboard;
 import com.nak.starfire.tile.Tile;
 import com.nak.starfire.utilities.Grid;
-import com.nak.starfire.utilities.Time;
 import com.nak.starfire.utilities.Utilities;
 
 public class Level {
@@ -28,13 +27,14 @@ public class Level {
 	private Grid grid;
 	private int mapwidth, mapheight;
 	private int[][] tilecache;
-	private int xOff, yOff;
+	public int xOff, yOff;
 	public int dX, dY;
 	private int shipVelX = 2;
 	private int shipVelY = 2;
 	private boolean colliding;
 
 	private List<Entity> entities = new ArrayList<Entity>();
+	private List<Enemy> enemies = new ArrayList<Enemy>();
 	private List<Bullet> bullets = new ArrayList<Bullet>();
 	private List<Asteroid> asteroids = new ArrayList<Asteroid>();
 	private List<Rectangle> tiles = new ArrayList<Rectangle>();
@@ -42,16 +42,15 @@ public class Level {
 	public Level(String path) {
 		loadLevel(path);
 		player = new Player(this);
-		grid = new Grid(mapwidth, mapheight);
-
-		dX = 50;
-		dY = 50;
 		
+		for (int i = 0; i < 10; i++) {
+			enemies.add(new Enemy(this, 400, 300)); 
+		}
+		
+		grid = new Grid(mapwidth, mapheight);		
 	}
 
 	public void update() {
-		
-		System.out.println(mapwidth);
 		collision();
 		for (int y = 0; y < mapheight; y++) {
 			for (int x = 0; x < mapwidth; x++) {
@@ -69,6 +68,9 @@ public class Level {
 		}
 		for (int i = 0; i < asteroids.size(); i++) {
 			asteroids.get(i).update();
+		}
+		for (int i = 0; i < enemies.size(); i++) {
+			enemies.get(i).update();
 		}
 
 		xOff = ((Game.WIDTH * Game.SCALE) / 2) - dX;
@@ -97,6 +99,9 @@ public class Level {
 		for (int i = 0; i < asteroids.size(); i++) {
 			asteroids.get(i).render(g);
 		}
+		for (int i = 0; i < enemies.size(); i++) {
+			enemies.get(i).render(g);
+		}
 		player.render(g);
 		grid.render(g, xOff, yOff);
 
@@ -121,6 +126,7 @@ public class Level {
 				bullets.remove(i);
 			}
 		}
+		
 		if (player.getTopBounds().intersects(grid.cell(x, y))) {
 			colliding = true;
 			dY+= 2;
@@ -137,8 +143,28 @@ public class Level {
 			colliding = true;
 			dX-= 2;
 		}
+		
+		////////////////////////////////////////////////////////////////
+		for (int i = 0; i < enemies.size(); i++) {
+		if (enemies.get(i).getTopBounds().intersects(grid.cell(x, y))) {
+			colliding = true;
+			enemies.get(i).setY(grid.cell(x, y).getY() - yOff + 232);
+		}
+		if (enemies.get(i).getBotBounds().intersects(grid.cell(x, y))) {
+			colliding = true;
+			enemies.get(i).setY(grid.cell(x, y).getY() - yOff + 169);
+		}
+		if (enemies.get(i).getLeftBounds().intersects(grid.cell(x, y))) {
+			colliding = true;
+			enemies.get(i).setX(grid.cell(x, y).getX() - xOff + 378);
+		}
+		if (enemies.get(i).getRightBounds().intersects(grid.cell(x, y))) {
+			colliding = true;
+			enemies.get(i).setX(grid.cell(x, y).getX() - xOff + 323);
+		}
 		if(colliding){
 			colliding = false;
+		}
 		}
 	}
 
