@@ -2,7 +2,6 @@ package com.nak.starfire.gamestate;
 
 import java.awt.Graphics;
 
-import com.nak.starfire.entity.Player;
 import com.nak.starfire.input.Keyboard;
 import com.nak.starfire.level.Level;
 

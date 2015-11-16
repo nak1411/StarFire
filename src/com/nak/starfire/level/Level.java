@@ -1,7 +1,6 @@
 package com.nak.starfire.level;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -9,7 +8,6 @@ import java.util.List;
 import java.util.Random;
 
 import com.nak.starfire.Game;
-import com.nak.starfire.entity.Asteroid;
 import com.nak.starfire.entity.Bullet;
 import com.nak.starfire.entity.Enemy;
 import com.nak.starfire.entity.Entity;
@@ -21,13 +19,11 @@ import com.nak.starfire.utilities.Utilities;
 
 public class Level {
 
-	private Random rand = new Random();
-	private Font font = new Font("Calibri", Font.BOLD, 18);
-	private Player player;
 	private Grid grid;
+	private Random rand = new Random();
 	private int mapwidth, mapheight;
 	private int[][] tilecache;
-	public int xOff, yOff;
+	public double xOff, yOff;
 	public int dX, dY;
 	private int shipVelX = 2;
 	private int shipVelY = 2;
@@ -35,22 +31,24 @@ public class Level {
 
 	private List<Entity> entities = new ArrayList<Entity>();
 	private List<Enemy> enemies = new ArrayList<Enemy>();
-	private List<Bullet> bullets = new ArrayList<Bullet>();
-	private List<Asteroid> asteroids = new ArrayList<Asteroid>();
-	private List<Rectangle> tiles = new ArrayList<Rectangle>();
+	private List<Player> players = new ArrayList<Player>();
+	private List<Bullet> enemyBullets = new ArrayList<Bullet>();
+	private List<Bullet> playerBullets = new ArrayList<Bullet>();
+	
 
 	public Level(String path) {
 		loadLevel(path);
-		player = new Player(this);
+		grid = new Grid(mapwidth, mapheight);
+		players.add(new Player(this, grid));
 		
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 1; i++) {
 			enemies.add(new Enemy(this, 400, 300)); 
-		}
-		
-		grid = new Grid(mapwidth, mapheight);		
+		}			
 	}
 
 	public void update() {
+		
+		System.out.println();
 		collision();
 		for (int y = 0; y < mapheight; y++) {
 			for (int x = 0; x < mapwidth; x++) {
@@ -63,11 +61,14 @@ public class Level {
 		for (int i = 0; i < entities.size(); i++) {
 			entities.get(i).update();
 		}
-		for (int i = 0; i < bullets.size(); i++) {
-			bullets.get(i).update();
+		for (int i = 0; i < enemyBullets.size(); i++) {
+			enemyBullets.get(i).update();
 		}
-		for (int i = 0; i < asteroids.size(); i++) {
-			asteroids.get(i).update();
+		for (int i = 0; i < playerBullets.size(); i++) {
+			playerBullets.get(i).update();
+		}
+		for (int i = 0; i < players.size(); i++) {
+			players.get(i).update();
 		}
 		for (int i = 0; i < enemies.size(); i++) {
 			enemies.get(i).update();
@@ -76,44 +77,54 @@ public class Level {
 		xOff = ((Game.WIDTH * Game.SCALE) / 2) - dX;
 		yOff = ((Game.HEIGHT * Game.SCALE) / 2) - dY;
 
-//		if (Time.getTime() / 1000 % 10 == 0) {
-//			 addAsteroid(new Asteroid(this, SpriteSheet.asteroidOne, rand.nextInt(mapwidth * Tile.TILEWIDTH) + (Tile.TILEWIDTH), Tile.TILEHEIGHT + 20));
-//		}
-		player.update();
 		grid.update();
+		
+		for (int i = 0; i < playerBullets.size(); i++) {
+			for (int j = 0; j < enemies.size(); j++) {
+					if(playerBullets.get(i).getBounds().intersects(enemies.get(j).getBounds())){
+						enemies.remove(j);
+				}
+			}
+		}
+		
+		if(enemies.size() == 0){
+			enemies.add(new Enemy(this, 400, 300));
+					
+		}
 	}
 
 	public void render(Graphics g) {
 		for (int y = 0; y < mapheight; y++) {
 			for (int x = 0; x < mapwidth; x++) {
-				getTile(x, y).render(g, (x * Tile.TILEWIDTH) + xOff, (y * Tile.TILEHEIGHT) + yOff);
+				getTile(x, y).render(g, (x * Tile.TILEWIDTH) + (int)xOff, (y * Tile.TILEHEIGHT) + (int)yOff);
 			}
 		}
 
 		for (int i = 0; i < entities.size(); i++) {
 			entities.get(i).render(g);
 		}
-		for (int i = 0; i < bullets.size(); i++) {
-			bullets.get(i).render(g);
+		for (int i = 0; i < enemyBullets.size(); i++) {
+			enemyBullets.get(i).render(g);
 		}
-		for (int i = 0; i < asteroids.size(); i++) {
-			asteroids.get(i).render(g);
+		for (int i = 0; i < playerBullets.size(); i++) {
+			playerBullets.get(i).render(g);
+		}
+		for (int i = 0; i < players.size(); i++) {
+			players.get(i).render(g);
 		}
 		for (int i = 0; i < enemies.size(); i++) {
 			enemies.get(i).render(g);
 		}
-		player.render(g);
-		grid.render(g, xOff, yOff);
-
-		g.setColor(Color.WHITE);
-		g.setFont(font);
-		g.drawString("Asteroids On Screen: " + String.valueOf(asteroids.size()), 10, 15);
 		
-		for (int y = 0; y < mapheight; y++) {
-			for (int x = 0; x < mapwidth; x++) {
-				if(player.getCenterBounds().intersects(grid.cell(x, y))){
-					g.setColor(Color.WHITE);
-					g.drawString("Player Coords: (" + grid.getId().get(x) + "," + grid.getId().get(y) + ")", 10, 50);
+		grid.render(g, (int)xOff, (int)yOff);
+		
+		for (int i = 0; i < players.size(); i++) {
+			for (int y = 0; y < mapheight; y++) {
+				for (int x = 0; x < mapwidth; x++) {
+					if(players.get(i).getCenterBounds().intersects(grid.cell(x, y))){
+						g.setColor(Color.WHITE);
+						g.drawString("Player Coords: (" + grid.getId().get(x) + "," + grid.getId().get(y) + ")", 10, 15);
+					}
 				}
 			}
 		}
@@ -121,55 +132,62 @@ public class Level {
 	
 	public void tileCollision(int x, int y){
 		
-		for (int i = 0; i < bullets.size(); i++) {
-			if(bullets.get(i).getBounds().intersects(grid.cell(x, y))){
-				bullets.remove(i);
+		for (int i = 0; i < playerBullets.size(); i++) {
+			if(playerBullets.get(i).getBounds().intersects(grid.cell(x, y))){
+				playerBullets.remove(i);
 			}
 		}
 		
-		if (player.getTopBounds().intersects(grid.cell(x, y))) {
-			colliding = true;
-			dY+= 2;
+		for (int i = 0; i < enemyBullets.size(); i++) {
+			if(enemyBullets.get(i).getBounds().intersects(grid.cell(x, y))){
+				enemyBullets.remove(i);
+			}
 		}
-		if (player.getBotBounds().intersects(grid.cell(x, y))) {
-			colliding = true;
-			dY-= 2;
-		}
-		if (player.getLeftBounds().intersects(grid.cell(x, y))) {
-			colliding = true;
-			dX+= 2;
-		}
-		if (player.getRightBounds().intersects(grid.cell(x, y))) {
-			colliding = true;
-			dX-= 2;
+		
+		for (int i = 0; i < players.size(); i++) {
+			if (players.get(i).getTopBounds().intersects(grid.cell(x, y))) {
+				colliding = true;
+				dY+= 2;
+			}
+			if (players.get(i).getBotBounds().intersects(grid.cell(x, y))) {
+				colliding = true;
+				dY-= 2;
+			}
+			if (players.get(i).getLeftBounds().intersects(grid.cell(x, y))) {
+				colliding = true;
+				dX+= 2;
+			}
+			if (players.get(i).getRightBounds().intersects(grid.cell(x, y))) {
+				colliding = true;
+				dX-= 2;
+			}
 		}
 		
 		////////////////////////////////////////////////////////////////
 		for (int i = 0; i < enemies.size(); i++) {
-		if (enemies.get(i).getTopBounds().intersects(grid.cell(x, y))) {
-			colliding = true;
-			enemies.get(i).setY(grid.cell(x, y).getY() - yOff + 232);
-		}
-		if (enemies.get(i).getBotBounds().intersects(grid.cell(x, y))) {
-			colliding = true;
-			enemies.get(i).setY(grid.cell(x, y).getY() - yOff + 169);
-		}
-		if (enemies.get(i).getLeftBounds().intersects(grid.cell(x, y))) {
-			colliding = true;
-			enemies.get(i).setX(grid.cell(x, y).getX() - xOff + 378);
-		}
-		if (enemies.get(i).getRightBounds().intersects(grid.cell(x, y))) {
-			colliding = true;
-			enemies.get(i).setX(grid.cell(x, y).getX() - xOff + 323);
-		}
-		if(colliding){
-			colliding = false;
-		}
+			if (enemies.get(i).getTopBounds().intersects(grid.cell(x, y))) {
+				colliding = true;
+				enemies.get(i).setY(grid.cell(x, y).getY() - yOff + 232);
+			}
+			if (enemies.get(i).getBotBounds().intersects(grid.cell(x, y))) {
+				colliding = true;
+				enemies.get(i).setY(grid.cell(x, y).getY() - yOff + 169);
+			}
+			if (enemies.get(i).getLeftBounds().intersects(grid.cell(x, y))) {
+				colliding = true;
+				enemies.get(i).setX(grid.cell(x, y).getX() - xOff + 378);
+			}
+			if (enemies.get(i).getRightBounds().intersects(grid.cell(x, y))) {
+				colliding = true;
+				enemies.get(i).setX(grid.cell(x, y).getX() - xOff + 323);
+			}
+			if(colliding){
+				colliding = false;
+			}
 		}
 	}
 
 	public void collision() {
-	
 		if ((dX <= 6)) {
 			colliding = true;
 			dX = 6;
@@ -189,17 +207,17 @@ public class Level {
 	}
 
 	public void input() {
-			if (Keyboard.left && !colliding) {
-				dX -= shipVelX;
-			}
-			if (Keyboard.right && !colliding) {
-				dX += shipVelX;
-			}
-			if (Keyboard.up && !colliding) {
-				dY -= shipVelY;
-			}
-			if (Keyboard.down && !colliding) {
-				dY += shipVelY;
+		if (Keyboard.left && !colliding) {
+			dX -= shipVelX;
+		}
+		if (Keyboard.right && !colliding) {
+			dX += shipVelX;
+		}
+		if (Keyboard.up && !colliding) {
+			dY -= shipVelY;
+		}
+		if (Keyboard.down && !colliding) {
+			dY += shipVelY;
 		}
 	}
 
@@ -211,20 +229,20 @@ public class Level {
 		entities.remove(entity);
 	}
 
-	public void addBullet(Bullet bullet) {
-		bullets.add(bullet);
+	public void addPlayerBullet(Bullet bullet) {
+		playerBullets.add(bullet);
 	}
 
-	public void removeBullet(Bullet bullet) {
-		bullets.remove(bullet);
+	public void removePlayerBullet(Bullet bullet) {
+		playerBullets.remove(bullet);
+	}
+	
+	public void addEnemyBullet(Bullet bullet) {
+		enemyBullets.add(bullet);
 	}
 
-	public void addAsteroid(Asteroid asteroid) {
-		asteroids.add(asteroid);
-	}
-
-	public void removeAsteroid(Asteroid asteroid) {
-		asteroids.remove(asteroid);
+	public void removeEnemyBullet(Bullet bullet) {
+		enemyBullets.remove(bullet);
 	}
 
 	public Tile getTile(int x, int y) {
@@ -266,31 +284,8 @@ public class Level {
 		this.mapheight = mapheight;
 	}
 
-	public List<Entity> getEntities() {
-		return entities;
-	}
-
-	public void setEntities(List<Entity> entities) {
-		this.entities = entities;
-	}
-
-	public List<Bullet> getBullets() {
-		return bullets;
-	}
-
-	public void setBullets(List<Bullet> bullets) {
-		this.bullets = bullets;
-	}
-
-	public List<Asteroid> getAsteroids() {
-		return asteroids;
-	}
-
-	public void setAsteroids(List<Asteroid> asteroids) {
-		this.asteroids = asteroids;
-	}
-
 	private Rectangle getTileBounds(int x, int y, int width, int height) {
 		return new Rectangle(x, y, width, height);
 	}
+	
 }

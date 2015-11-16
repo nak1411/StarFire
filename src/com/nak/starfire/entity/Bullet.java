@@ -29,6 +29,7 @@ public class Bullet extends Projectile{
 		if(!isRemoved()){
 			g.drawImage(image, (int)x - level.dX, (int)y - level.dY, WIDTH, HEIGHT, null);
 		}
+
 //		Graphics2D g2d = (Graphics2D) g;
 //		g2d.setColor(Color.RED);
 //		g2d.draw(getBounds());
@@ -40,26 +41,22 @@ public class Bullet extends Projectile{
 			|| (x - level.dX >= (Tile.TILEWIDTH * level.getMapwidth() - Tile.TILEWIDTH) + ((Game.WIDTH * Game.SCALE / 2) + 10) - level.dX)
 			|| (y - level.dY >= (Tile.TILEHEIGHT * level.getMapheight() - Tile.TILEHEIGHT) + ((Game.HEIGHT * Game.SCALE / 2) + 8) - level.dY)
 			|| (y - level.dY <= (level.getMapheight() - Tile.TILEHEIGHT) + (Game.HEIGHT * Game.SCALE / 2) - level.dY)) {
-			level.removeBullet(this);
+			level.removePlayerBullet(this);
+			level.removeEnemyBullet(this);
 		}
 		y += ny;
 		x += nx;
 	}
 	
 	public void collision() {
-		for (int i = 0; i < level.getAsteroids().size(); i++) {
-			if (getBounds().intersects(level.getAsteroids().get(i).getBounds())) {
-				level.getAsteroids().get(i).remove();
-				remove();
-			}
-		}
+
 	}
 	
 	public Rectangle getBounds(){
 		return new Rectangle(((int)x - level.dX) + 12, ((int)y - level.dY) + 12, 8, 8);
 	}
 	
-	public void remove() {
-		level.removeBullet(this);
-	}
+//	public void remove() {
+//		level.removeBullet(this);
+//	}
 }

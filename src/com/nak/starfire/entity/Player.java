@@ -1,9 +1,6 @@
 package com.nak.starfire.entity;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
@@ -11,6 +8,7 @@ import com.nak.starfire.Game;
 import com.nak.starfire.gfx.SpriteSheet;
 import com.nak.starfire.input.Mouse;
 import com.nak.starfire.level.Level;
+import com.nak.starfire.utilities.Grid;
 import com.nak.starfire.utilities.Time;
 
 public class Player extends Mob {
@@ -18,20 +16,17 @@ public class Player extends Mob {
 	public static BufferedImage playerimage = SpriteSheet.playerup;
 	private Level level ;
 	private double dirInDeg;
-	private int rateOfFire = 9;
+	private double rateOfFire = 8.0;
 	private long nextBullet = 0;
-	private long bulletDelay = Time.SECOND - (100000000 * rateOfFire);
-	private Font font = new Font("Calibri", Font.BOLD, 18);
+	private long bulletDelay = (long) (Time.SECOND - (100000000 * rateOfFire));
 
-	public Player(Level level) {
+	public Player(Level level, Grid grid) {
 		this.level = level;
 	}
 
 	public void render(Graphics g) {
 		g.drawImage(playerimage, (Game.WIDTH * Game.SCALE) / 2 - 7, (Game.HEIGHT * Game.SCALE) / 2 , WIDTH, HEIGHT, null);
-		g.setColor(Color.WHITE);
-		g.setFont(font);
-		g.drawString("ROF: " + String.valueOf(rateOfFire), 10, 35);
+
 //		
 //		Graphics2D g2d = (Graphics2D) g;
 //		g2d.setColor(Color.GREEN);
@@ -60,7 +55,7 @@ public class Player extends Mob {
 			double dir = Math.atan2(dy, dx);
 			dirInDeg = Math.toDegrees(dir);
 			
-			level.addBullet(new Bullet(level, SpriteSheet.bulletup, x + level.dX, y + level.dY, dir));
+			level.addPlayerBullet(new Bullet(level, SpriteSheet.bulletup, x + level.dX, y + level.dY, dir));
 			
 			if(dirInDeg <= 158.0 && dirInDeg > 113.0){
 				playerimage = SpriteSheet.playerlowerleft;
